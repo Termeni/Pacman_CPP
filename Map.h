@@ -1,11 +1,20 @@
-#include <list>
+#include <vector>
+#include <iostream>
 #include "Cell.h"
 
 using namespace std;
 
 class Map{
     private:
-        list<list<Cell> > map;
+        int rows;
+        int columns;
+        vector<vector<Cell> > map;
+        
+        void initialize();
+        void fill();
+        
+        
     public:
         Map(int rows, int columns);
+        void print();
 };
