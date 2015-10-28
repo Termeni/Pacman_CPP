@@ -1,11 +1,14 @@
 #include <iostream>
-#include "Cell.h"
+//#include "Cell.h"
+#include "Map.h"
 
 using namespace std;
 
 int main() {
     
-    cout << "Hello World!" << endl;
+    cout << "Pacman" << endl;
+    
+    cout << "Generating map..." << endl;
     
     Cell c = Cell('5');
     
