@@ -1,8 +1,14 @@
-all: pacman
+CC=g++
+CFLAGS=-c -Wall
+LDFLAGS=
+SOURCES=pacman.cc Cell.cc
+OBJECTS=$(SOURCES:.cc=.o)
+EXECUTABLE=pacman
 
-%: %.cc
-	g++ -std=c++11 $< -o $@
+all: $(SOURCES) $(EXECUTABLE)
+    
+$(EXECUTABLE): $(OBJECTS) 
+	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
 
-%: %.c
-	gcc $< -o $@
-
+.cc.o:
+	$(CC) $(CFLAGS) $< -o $@
