@@ -1,5 +1,4 @@
 #include <iostream>
-//#include "Cell.h"
 #include "Map.h"
 
 using namespace std;
@@ -10,8 +9,14 @@ int main() {
     
     cout << "Generating map..." << endl;
     
-    Map *map = new Map(11,11);
-    //*map->print();
+    Cell *c = new Cell('5');
+    Cell c2 = Cell('5');
+    
+    cout << c->getValue() << endl;
+    cout << c2.getValue() << endl;
+    
+    //Map *map = new Map(11,11);
+    //map->print();
     
     cout << "printed map..." << endl;
     
