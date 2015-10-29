@@ -15,8 +15,8 @@ int main() {
     cout << c->getValue() << endl;
     cout << c2.getValue() << endl;
     
-    //Map *map = new Map(11,11);
-    //map->print();
+    Map *map = new Map(11,11);
+    map->print();
     
     cout << "printed map..." << endl;
     
