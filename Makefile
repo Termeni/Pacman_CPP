@@ -3,7 +3,7 @@ CFLAGS=-c -Wall
 LDFLAGS=
 SOURCES=pacman.cc Cell.cc Map.cc
 OBJECTS=$(SOURCES:.cc=.o)
-EXECUTABLE=pacman
+EXECUTABLE=pacman.exe
 
 all: $(SOURCES) $(EXECUTABLE)
     

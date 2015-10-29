@@ -10,27 +10,84 @@ Map::Map(int rows, int columns){
     for (int i = 0; i < rows; i++) {
         vector<Cell> vector_columns(columns);
         for (int j = 0; j < columns; j++) {
-            Cell cell = Cell();
-            vector_columns[j]=cell;
+            Cell *cell = new Cell();
+            vector_columns[j]=*cell;
         }
         vector_rows[i] = vector_columns;
     }
-    this->map = vector_rows;
-    this->fill();
+    map = vector_rows;
+    initialize();
 }
 
-void Map::fill(){
+void Map::initialize(){
+   createOuterBox();
+   createInnerBox();
+}
+
+void Map::createOuterBox(){
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < columns; j++) {
-            this->map[i][j].setValue('0');
+            if(isOutterBorder(i,j))
+                map[i][j].setValue('0');
         }
     }
+}
+
+bool Map::isOutterBorder(int i, int j){
+    if(i==0 || j==0 || i==rows-1 || j==columns-1 )
+        return true;
+    else
+        return false;
+}
+
+void Map::createInnerBox(){
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < columns; j++) {
+            if(isInnerBox(i,j))
+                map[i][j].setValue('0');
+        }
+    }
+}
+
+bool Map::isInnerBox(int i, int j){
+    if( isBoxUp(i,j) || isBoxLeft(i,j) || isBoxRight(i,j) || isBoxDown(i,j))
+        return true;
+    else
+        return false;
+}
+
+bool Map::isBoxUp(int i, int j){
+    if (i==rows/2 && j>columns/2-3 && j<columns/2+3 && j!=columns/2)
+        return true;
+    else
+        return false;
+}
+
+bool Map::isBoxDown(int i, int j){
+    if (i==rows/2+4 && j>columns/2-3 && j<columns/2+3)
+        return true;
+    else
+        return false;
+}
+        
+bool Map::isBoxLeft(int i, int j){
+    if (j==columns/2-3 && i>rows/2-1 && i<rows/2+5)
+        return true;
+    else
+        return false;
+}
+
+bool Map::isBoxRight(int i, int j){
+    if (j==columns/2+3 && i>rows/2-1 && i<rows/2+5)
+        return true;
+    else
+        return false;
 }
 
 void Map::print(){
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < columns; j++) {
-            cout << this->map[i][j].getValue();
+            cout << map[i][j].getValue();
         }
         cout << endl;
     }
