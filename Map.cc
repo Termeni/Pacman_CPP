@@ -106,7 +106,7 @@ void Map::fillLeftSide(){
         }
         saturation = walls/size;
         //cout << saturation << endl;
-    }while(saturation<0.33);
+    }while(saturation<0.35);
 }
 
 bool Map::isValidPoint(int x, int y){
@@ -158,6 +158,12 @@ void Map::polishLabrynth(){
                 unlockAlley(i,j);
         }
     }
+    for (int i = rows-2; i > 2; i--) {
+        for (int j = columns/2; j > 2; j--) {
+            if(isAlley(i,j))
+                unlockAlley(i,j);
+        }
+    }
 }
 
 bool Map::isAlley(int x, int y){
@@ -185,7 +191,12 @@ void Map::unlockAlley(int x, int y){
 }
 
 void Map::mirrorize(){
-    
+    for (int i = 1; i < rows; i++) {
+        for (int j = 1; j < columns; j++) {
+            if(map[i][j].isWall())
+                map[i][columns-1-j].setValue('0');
+        }
+    }
 }
 
 void Map::print(){

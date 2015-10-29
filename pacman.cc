@@ -9,7 +9,7 @@ int main() {
     
     cout << "Generating map..." << endl;
     
-    Map *map = new Map(21,21);
+    Map *map = new Map(31,31);
     map->print();
     
     cout << "printed map..." << endl;
