@@ -22,6 +22,7 @@ Map::Map(int rows, int columns){
 void Map::initialize(){
    createOuterBox();
    createInnerBox();
+   fillLabrynth();
 }
 
 void Map::createOuterBox(){
@@ -82,6 +83,52 @@ bool Map::isBoxRight(int i, int j){
         return true;
     else
         return false;
+}
+
+void Map::fillLabrynth(){
+    fillLeftSide();
+    mirrorize();
+}
+
+void Map::fillLeftSide(){
+    
+    srand(time(NULL));
+    
+    for(int i = 0; i<1000; i++){
+        int randx = (rand() % rows);
+        int randy = (rand() % (columns/2));
+        if(isValidPoint(randx,randy)){
+            map[randx][randy].setValue('0');
+        }
+
+    }
+}
+
+bool Map::isValidPoint(int x, int y){
+    if(outOfMinimumSeparation(x,y) || toCloseToTheBox(x,y)){
+        return false;   
+    }else{
+        return true;
+    }
+}
+
+bool Map::outOfMinimumSeparation(int x, int y){
+    if(x<2 || y<2 || x>=rows-2 || y>=columns/2 )
+        return true;
+    else
+        return false;
+}
+
+bool Map::toCloseToTheBox(int x, int y){
+    if( x>rows/2-2 && x<rows/2+6 && y>columns/2-5 && y<columns/2+4){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+void Map::mirrorize(){
+    
 }
 
 void Map::print(){

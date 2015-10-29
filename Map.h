@@ -1,5 +1,7 @@
 #include <vector>
 #include <iostream>
+#include <time.h>
+#include <stdlib.h>
 #include "Cell.h"
 
 using namespace std;
@@ -19,6 +21,12 @@ class Map{
         bool isBoxLeft(int i, int j);
         bool isBoxRight(int i, int j);
         bool isBoxDown(int i, int j);
+        void fillLabrynth();
+        void fillLeftSide();
+        bool isValidPoint(int x, int y);
+        bool outOfMinimumSeparation(int x, int y);
+        bool toCloseToTheBox(int x, int y);
+        void mirrorize();
         
     public:
         Map(int rows, int columns);
