@@ -6,4 +6,5 @@ class Cell{
         Cell(char value);
         void setValue(char value);
         char getValue();
+        bool isWall();
 };

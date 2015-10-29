@@ -87,25 +87,30 @@ bool Map::isBoxRight(int i, int j){
 
 void Map::fillLabrynth(){
     fillLeftSide();
+    polishLabrynth();
     mirrorize();
 }
 
 void Map::fillLeftSide(){
     
     srand(time(NULL));
-    
-    for(int i = 0; i<1000; i++){
+    float walls = getNumberOfWalls();
+    float size = getMapSize();
+    float saturation;
+    do{
         int randx = (rand() % rows);
         int randy = (rand() % (columns/2));
         if(isValidPoint(randx,randy)){
             map[randx][randy].setValue('0');
+            walls = walls + 1;
         }
-
-    }
+        saturation = walls/size;
+        //cout << saturation << endl;
+    }while(saturation<0.33);
 }
 
 bool Map::isValidPoint(int x, int y){
-    if(outOfMinimumSeparation(x,y) || toCloseToTheBox(x,y)){
+    if(outOfMinimumSeparation(x,y) || toCloseToTheBox(x,y) || isWall(x,y)){
         return false;   
     }else{
         return true;
@@ -124,6 +129,58 @@ bool Map::toCloseToTheBox(int x, int y){
         return true;
     }else{
         return false;
+    }
+}
+
+bool Map::isWall(int x, int y){
+    return map[x][y].isWall();
+}
+
+int Map::getNumberOfWalls(){
+    int total = 0;
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < columns; j++) {
+            if(map[i][j].isWall())
+                total = total + 1;
+        }
+    }
+    return total;
+}
+
+int Map::getMapSize(){
+    return rows*columns;
+}
+
+void Map::polishLabrynth(){
+    for (int i = 2; i < rows-2; i++) {
+        for (int j = 2; j < columns/2; j++) {
+            if(isAlley(i,j))
+                unlockAlley(i,j);
+        }
+    }
+}
+
+bool Map::isAlley(int x, int y){
+    int colindantWalls = 0;
+    if(map[x+1][y].isWall())
+        colindantWalls +=1;
+    if(map[x-1][y].isWall())
+        colindantWalls +=1;
+    if(map[x][y+1].isWall())
+        colindantWalls +=1;
+    if(map[x][y-1].isWall())
+        colindantWalls +=1;
+    return colindantWalls>=3;
+}
+
+//TODO: S'ha de refinar un pelet
+void Map::unlockAlley(int x, int y){
+    if( map[x+1][y].isWall() && map[x-1][y].isWall()){
+        map[x][y+1].setValue(' ');
+        map[x][y-1].setValue(' ');
+    }else{
+        map[x+1][y].setValue(' ');
+        map[x-1][y].setValue(' ');
     }
 }
 

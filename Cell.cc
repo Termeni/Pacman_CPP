@@ -15,3 +15,7 @@ void Cell::setValue(char value){
 char Cell::getValue(){
     return this->value;
 }
+
+bool Cell::isWall(){
+    return value=='0';
+}

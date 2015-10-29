@@ -26,6 +26,12 @@ class Map{
         bool isValidPoint(int x, int y);
         bool outOfMinimumSeparation(int x, int y);
         bool toCloseToTheBox(int x, int y);
+        bool isWall(int x, int y);
+        int getNumberOfWalls();
+        int getMapSize();
+        void polishLabrynth();
+        bool isAlley(int x, int y);
+        void unlockAlley(int x, int y);
         void mirrorize();
         
     public:
