@@ -8,12 +8,24 @@ Cell::Cell(char value){
     this->value = value;
 }
 
+void Cell::setId(int id){
+    this->id = id;
+}
+
+int Cell::getId(){
+    return this->id;
+}
+
 void Cell::setValue(char value){
     this->value = value;
 }
 
 char Cell::getValue(){
     return this->value;
+}
+
+bool Cell::isCorridor(){
+    return value==' ';
 }
 
 bool Cell::isWall(){

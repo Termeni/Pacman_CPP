@@ -1,7 +1,7 @@
 CC=g++
 CFLAGS=-c -Wall
 LDFLAGS=
-SOURCES=pacman.cc Cell.cc Map.cc
+SOURCES=pacman.cc Cell.cc Map.cc Graph.cc
 OBJECTS=$(SOURCES:.cc=.o)
 EXECUTABLE=pacman.exe
 

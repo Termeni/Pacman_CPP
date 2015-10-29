@@ -5,13 +5,15 @@ using namespace std;
 Map::Map(int rows, int columns){
     this->rows = rows;
     this->columns = columns;
-    
+    int id=0;
     vector<vector<Cell> >vector_rows(rows);
     for (int i = 0; i < rows; i++) {
         vector<Cell> vector_columns(columns);
         for (int j = 0; j < columns; j++) {
             Cell *cell = new Cell();
+            cell->setId(id);
             vector_columns[j]=*cell;
+            id +=1;
         }
         vector_rows[i] = vector_columns;
     }
@@ -94,6 +96,7 @@ void Map::fillLabrynth(){
 void Map::fillLeftSide(){
     
     srand(time(NULL));
+    int corridors = getNumberOfCorridors()-1;
     float walls = getNumberOfWalls();
     float size = getMapSize();
     float saturation;
@@ -102,7 +105,14 @@ void Map::fillLeftSide(){
         int randy = (rand() % (columns/2));
         if(isValidPoint(randx,randy)){
             map[randx][randy].setValue('0');
-            walls = walls + 1;
+            Graph *graph = obtainGraph();
+            //cout << "Pasillos: " << corridors << " Nodesconn: " << graph->connexNodes(map[1][1].getId()) << endl;
+            if(corridors==graph->connexNodes(map[1][1].getId())){
+                walls = walls + 1;
+                corridors = corridors - 1;
+            }else{
+                map[randx][randy].setValue(' ');
+            }
         }
         saturation = walls/size;
         //cout << saturation << endl;
@@ -136,6 +146,17 @@ bool Map::isWall(int x, int y){
     return map[x][y].isWall();
 }
 
+int Map::getNumberOfCorridors(){
+    int total = 0;
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < columns; j++) {
+            if(map[i][j].isCorridor())
+                total = total + 1;
+        }
+    }
+    return total;
+}
+
 int Map::getNumberOfWalls(){
     int total = 0;
     for (int i = 0; i < rows; i++) {
@@ -149,6 +170,31 @@ int Map::getNumberOfWalls(){
 
 int Map::getMapSize(){
     return rows*columns;
+}
+
+Graph* Map::obtainGraph(){
+    Graph *graph = new Graph(getMapSize());
+    
+    for (int i = 1; i < rows-1; i++) {
+        for (int j = 1; j < columns-1; j++) {
+            if(map[i][j].getValue()==' '){
+                if(map[i+1][j].getValue()==' '){
+                    graph->addEdge(map[i][j].getId(),map[i+1][j].getId());
+                }
+                if(map[i-1][j].getValue()==' '){
+                    graph->addEdge(map[i][j].getId(),map[i-1][j].getId());
+                }
+                if(map[i][j+1].getValue()==' '){
+                    graph->addEdge(map[i][j].getId(),map[i][j+1].getId());
+                }
+                if(map[i][j-1].getValue()==' '){
+                    graph->addEdge(map[i][j].getId(),map[i][j-1].getId());
+                }
+            }
+        }
+    }
+    
+    return graph;
 }
 
 void Map::polishLabrynth(){

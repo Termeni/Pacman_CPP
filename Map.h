@@ -3,6 +3,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include "Cell.h"
+#include "Graph.h"
 
 using namespace std;
 
@@ -27,8 +28,10 @@ class Map{
         bool outOfMinimumSeparation(int x, int y);
         bool toCloseToTheBox(int x, int y);
         bool isWall(int x, int y);
+        int getNumberOfCorridors();
         int getNumberOfWalls();
         int getMapSize();
+        Graph* obtainGraph();
         void polishLabrynth();
         bool isAlley(int x, int y);
         void unlockAlley(int x, int y);
