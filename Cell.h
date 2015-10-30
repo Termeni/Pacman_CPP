@@ -11,4 +11,6 @@ class Cell{
         char getValue();
         bool isCorridor();
         bool isWall();
+        void setCorridor();
+        void setWall();
 };

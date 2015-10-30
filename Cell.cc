@@ -25,9 +25,17 @@ char Cell::getValue(){
 }
 
 bool Cell::isCorridor(){
-    return value==' ';
+    return value == ' ';
 }
 
 bool Cell::isWall(){
-    return value=='0';
+    return value == '0';
+}
+
+void Cell::setWall(){
+    this->value = '0';
+}
+
+void Cell::setCorridor(){
+    this->value = ' ';
 }

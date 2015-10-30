@@ -31,7 +31,7 @@ void Map::createOuterBox(){
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < columns; j++) {
             if(isOutterBorder(i,j))
-                map[i][j].setValue('0');
+                map[i][j].setWall();
         }
     }
 }
@@ -47,7 +47,7 @@ void Map::createInnerBox(){
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < columns; j++) {
             if(isInnerBox(i,j))
-                map[i][j].setValue('0');
+                map[i][j].setWall();
         }
     }
 }
@@ -104,14 +104,14 @@ void Map::fillLeftSide(){
         int randx = (rand() % rows);
         int randy = (rand() % (columns/2));
         if(isValidPoint(randx,randy)){
-            map[randx][randy].setValue('0');
+            map[randx][randy].setWall();
             Graph *graph = obtainGraph();
             //cout << "Pasillos: " << corridors << " Nodesconn: " << graph->connexNodes(map[1][1].getId()) << endl;
             if(corridors==graph->connexNodes(map[1][1].getId())){
                 walls = walls + 1;
                 corridors = corridors - 1;
             }else{
-                map[randx][randy].setValue(' ');
+                map[randx][randy].setCorridor();
             }
         }
         saturation = walls/size;
@@ -177,17 +177,17 @@ Graph* Map::obtainGraph(){
     
     for (int i = 1; i < rows-1; i++) {
         for (int j = 1; j < columns-1; j++) {
-            if(map[i][j].getValue()==' '){
-                if(map[i+1][j].getValue()==' '){
+            if(map[i][j].isCorridor()){
+                if(map[i+1][j].isCorridor()){
                     graph->addEdge(map[i][j].getId(),map[i+1][j].getId());
                 }
-                if(map[i-1][j].getValue()==' '){
+                if(map[i-1][j].isCorridor()){
                     graph->addEdge(map[i][j].getId(),map[i-1][j].getId());
                 }
-                if(map[i][j+1].getValue()==' '){
+                if(map[i][j+1].isCorridor()){
                     graph->addEdge(map[i][j].getId(),map[i][j+1].getId());
                 }
-                if(map[i][j-1].getValue()==' '){
+                if(map[i][j-1].isCorridor()){
                     graph->addEdge(map[i][j].getId(),map[i][j-1].getId());
                 }
             }
@@ -228,11 +228,11 @@ bool Map::isAlley(int x, int y){
 //TODO: S'ha de refinar un pelet
 void Map::unlockAlley(int x, int y){
     if( map[x+1][y].isWall() && map[x-1][y].isWall()){
-        map[x][y+1].setValue(' ');
-        map[x][y-1].setValue(' ');
+        map[x][y+1].setCorridor();
+        map[x][y-1].setCorridor();
     }else{
-        map[x+1][y].setValue(' ');
-        map[x-1][y].setValue(' ');
+        map[x+1][y].setCorridor();
+        map[x-1][y].setCorridor();
     }
 }
 
@@ -240,7 +240,7 @@ void Map::mirrorize(){
     for (int i = 1; i < rows; i++) {
         for (int j = 1; j < columns; j++) {
             if(map[i][j].isWall())
-                map[i][columns-1-j].setValue('0');
+                map[i][columns-1-j].setWall();
         }
     }
 }
