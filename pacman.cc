@@ -12,7 +12,7 @@ int main() {
     Map *map = new Map(31,31);
     map->print();
     
-    cout << "printed map..." << endl;
+    cout << "Map generated." << endl;
     
     
     /*
