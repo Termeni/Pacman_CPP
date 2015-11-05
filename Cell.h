@@ -1,3 +1,10 @@
+
+#define WALL '0'
+#define CORRIDOR ' '
+#define FOOD '1'
+#define PACMAN '2'
+#define GHOST '3'
+
 class Cell{
     private:
         char value;
@@ -13,4 +20,6 @@ class Cell{
         bool isWall();
         void setCorridor();
         void setWall();
+        void setFood();
+        bool hasFood();
 };

@@ -25,6 +25,7 @@ void Map::initialize(){
    createOuterBox();
    createInnerBox();
    fillLabrynth();
+   putFood();
 }
 
 void Map::createOuterBox(){
@@ -115,7 +116,7 @@ void Map::fillLeftSide(){
             }
         }
         saturation = walls/size;
-        //cout << saturation << endl;
+        cout << saturation << endl;
     }while(saturation<0.35);
 }
 
@@ -223,6 +224,36 @@ bool Map::isAlley(int x, int y){
     if(map[x][y-1].isWall())
         colindantWalls +=1;
     return colindantWalls>=3;
+}
+
+bool Map::isCorridor(int x, int y){
+    return map[x][y].isCorridor();
+}
+
+
+void Map::putFood(){
+
+    bool la=false;
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < columns; j++) {
+            if(map[i][j].isCorridor()){
+                if (!la)
+                {
+                    map[i][j].setFood();
+                    la=true;
+                }else{
+                    la=false; 
+            }   
+                }
+        }
+    }
+
+
+
+}
+
+bool Map::hasFood(int x, int y){
+    return map[x][y].hasFood();
 }
 
 //TODO: S'ha de refinar un pelet

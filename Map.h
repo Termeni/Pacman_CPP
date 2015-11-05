@@ -27,7 +27,9 @@ class Map{
         bool isValidPoint(int x, int y);
         bool outOfMinimumSeparation(int x, int y);
         bool toCloseToTheBox(int x, int y);
-        bool isWall(int x, int y);
+        bool isCorridor(int x, int y);
+        void putFood();
+
         int getNumberOfCorridors();
         int getNumberOfWalls();
         int getMapSize();
@@ -40,4 +42,6 @@ class Map{
     public:
         Map(int rows, int columns);
         void print();
+        bool isWall(int x, int y);
+        bool hasFood(int x, int y);
 };
