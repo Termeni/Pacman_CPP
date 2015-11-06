@@ -26,6 +26,7 @@ void Map::initialize(){
    createInnerBox();
    fillLabrynth();
    putFood();
+   putPacman();
 }
 
 void Map::createOuterBox(){
@@ -143,6 +144,10 @@ bool Map::toCloseToTheBox(int x, int y){
     }
 }
 
+bool Map::isPacman(int x, int y){
+    return map[x][y].isPacman();
+}
+
 bool Map::isWall(int x, int y){
     return map[x][y].isWall();
 }
@@ -231,25 +236,66 @@ bool Map::isCorridor(int x, int y){
 }
 
 
+void Map::putPacman(){
+    pacmanX = (rows/2)+5;
+    pacmanY = columns/2;
+
+    map[pacmanX][pacmanY].setPacman();   
+}
+
+void Map::movePacman(int key){
+
+
+    switch(key)
+    {
+        case LEFT: 
+            if (!isWall(pacmanX,pacmanY-1))
+            {
+                map[pacmanX][pacmanY].setCorridor();
+                map[pacmanX][pacmanY-1].setPacman();
+                pacmanY=pacmanY-1;
+            }
+        break;
+
+        case UP: 
+            if (!isWall(pacmanX-1,pacmanY))
+            {
+                map[pacmanX][pacmanY].setCorridor();
+                map[pacmanX-1][pacmanY].setPacman();
+                pacmanX=pacmanX-1;
+            }
+        break;
+
+        case RIGHT: 
+            if (!isWall(pacmanX,pacmanY+1))
+            {
+                map[pacmanX][pacmanY].setCorridor();
+                map[pacmanX][pacmanY+1].setPacman();
+                pacmanY=pacmanY+1;
+            }
+        break;
+
+        case DOWN: 
+            if (!isWall(pacmanX+1,pacmanY))
+            {
+                map[pacmanX][pacmanY].setCorridor();
+                map[pacmanX+1][pacmanY].setPacman();
+                pacmanX=pacmanX+1;
+            }
+            break;
+    }
+}
+
 void Map::putFood(){
 
     bool la=false;
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < columns; j++) {
-            if(map[i][j].isCorridor()){
-                if (!la)
-                {
-                    map[i][j].setFood();
-                    la=true;
-                }else{
-                    la=false; 
-            }   
-                }
+            if(map[i][j].isCorridor() && !isInnerBox(i,j)){
+                map[i][j].setFood();
+            }
         }
     }
-
-
-
 }
 
 bool Map::hasFood(int x, int y){

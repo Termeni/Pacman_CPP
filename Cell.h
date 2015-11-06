@@ -22,4 +22,6 @@ class Cell{
         void setWall();
         void setFood();
         bool hasFood();
+        bool isPacman();
+        void setPacman();
 };

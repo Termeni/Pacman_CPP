@@ -47,3 +47,10 @@ void Cell::setFood(){
 bool Cell::hasFood(){
     return value == FOOD;
 }
+
+bool Cell::isPacman(){
+    return value == PACMAN;
+}
+void Cell::setPacman(){
+    this->value = PACMAN;
+}

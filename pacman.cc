@@ -1,8 +1,8 @@
 #include <iostream>
 #include "Map.h"
 #include <GLUT/glut.h>
-#include <math.h> 
-
+#include <math.h>  
+#include "KeyboardKeys.h"
 using namespace std;
 
 #define COLUMNS 35
@@ -11,9 +11,15 @@ using namespace std;
 #define HEIGHT 1000
 #define PI 3.14159265
 
+
 void drawFilledCircle(GLfloat x, GLfloat y, GLfloat radius);
+
 void display();
-void drawPacman();
+void keyboard(unsigned char key, int x, int y);
+
+void drawPacman(int i, int j);
+void drawFood(int i, int j);
+void drawWall(int i, int j);
 Map *map;
 
 int main(int argc,char *argv[]) {
@@ -27,32 +33,22 @@ int main(int argc,char *argv[]) {
     
     cout << "Map generated." << endl;
 
-
-
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
     glutInitWindowPosition(50, 50);
     glutInitWindowSize(WIDTH, HEIGHT);
-    glutCreateWindow("Chess board");
+    glutCreateWindow("Pacman");
 
     glutDisplayFunc(display);
-    //glutKeyboardFunc(keyboard);
 
     glMatrixMode(GL_PROJECTION);
     gluOrtho2D(0,WIDTH-1,0,HEIGHT-1);
 
+    glutKeyboardFunc(keyboard);
     glutMainLoop();
 
     exit(0); //fix "Abort trap: 6"
     
-    
-    /*
-    Cell c = Cell('5');
-    
-    Cell c2 = Cell();
-    
-    cout << c.getValue() << c2.getValue() << c.getValue() << endl;
-    */
 }
 
 void display()
@@ -65,61 +61,66 @@ void display()
   for(i=0;i<ROWS;i++)
     for(j=0;j<COLUMNS;j++)
       if( map->isWall(i,j)) {
-            glColor3f(0.0,0.0,1.0);
-            //glColor3f(0.0,0.0,0.0);
-            glBegin(GL_QUADS);
 
-            glVertex2i((j+1)*WIDTH/COLUMNS,(ROWS-1-i)*HEIGHT/ROWS); 
-            glVertex2i(j*WIDTH/COLUMNS, (ROWS-1-i)*HEIGHT/ROWS); 
-            glVertex2i(j*WIDTH/COLUMNS, (ROWS-i)*HEIGHT/ROWS); 
-            glVertex2i((j+1)*WIDTH/COLUMNS,(ROWS-i)*HEIGHT/ROWS); 
-            
+            drawWall(i,j);
 
-            glEnd();
       }else if (map->hasFood(i,j))
       {
-            glColor3f(1.0,1.0,0.0);
+            drawFood(i,j);
 
-            int middleX = (((j+1)*WIDTH/COLUMNS)+(j*WIDTH/COLUMNS))/2; 
-            int middleY = (((ROWS-i)*HEIGHT/ROWS) + ((ROWS-1-i)*HEIGHT/ROWS))/2;
+      }else if (map->isPacman(i,j)){
 
-            drawFilledCircle(middleX,middleY,5.0);
-
-            /*
-
-            glBegin(GL_QUADS);
-
-            glVertex2i((j+1)*WIDTH/COLUMNS,(ROWS-1-i)*HEIGHT/ROWS); 
-            glVertex2i(j*WIDTH/COLUMNS, (ROWS-1-i)*HEIGHT/ROWS); 
-            glVertex2i(j*WIDTH/COLUMNS, (ROWS-i)*HEIGHT/ROWS); 
-            glVertex2i((j+1)*WIDTH/COLUMNS,(ROWS-i)*HEIGHT/ROWS); 
-            
-            glEnd();
-
-            */
-      }
-
-      drawPacman();
+            drawPacman(i,j);
+      }      
 
   glutSwapBuffers();
 
 }
 
-void drawPacman(){
+void drawWall(int i, int j){
+
+    glColor3f(0.0,0.0,1.0);
+            //glColor3f(0.0,0.0,0.0);
+    glBegin(GL_QUADS);
+
+    glVertex2i((j+1)*WIDTH/COLUMNS,(ROWS-1-i)*HEIGHT/ROWS); 
+    glVertex2i(j*WIDTH/COLUMNS, (ROWS-1-i)*HEIGHT/ROWS); 
+    glVertex2i(j*WIDTH/COLUMNS, (ROWS-i)*HEIGHT/ROWS); 
+    glVertex2i((j+1)*WIDTH/COLUMNS,(ROWS-i)*HEIGHT/ROWS); 
+            
+    glEnd();
+}
+
+void drawPacman(int i, int j){
+
+    glColor3f(0.0,1.0,1.0);
+
+    int middleX = (((j+1)*WIDTH/COLUMNS)+(j*WIDTH/COLUMNS))/2; 
+    int middleY = (((ROWS-i)*HEIGHT/ROWS) + ((ROWS-1-i)*HEIGHT/ROWS))/2;
+
+    drawFilledCircle(middleX,middleY,7.0);
     
 }
 
+void drawFood(int i, int j){
+
+    glColor3f(1.0,1.0,0.0);
+
+    int middleX = (((j+1)*WIDTH/COLUMNS)+(j*WIDTH/COLUMNS))/2; 
+    int middleY = (((ROWS-i)*HEIGHT/ROWS) + ((ROWS-1-i)*HEIGHT/ROWS))/2;
+
+    drawFilledCircle(middleX,middleY,5.0);
+
+}
 
 
 void drawFilledCircle(GLfloat x, GLfloat y, GLfloat radius){
     int i;
-    int triangleAmount = 20; //# of triangles used to draw circle
-    
-    //GLfloat radius = 0.8f; //radius
+    int triangleAmount = 20;
     GLfloat twicePi = 2.0f * PI;
     
     glBegin(GL_TRIANGLE_FAN);
-        glVertex2f(x, y); // center of circle
+        glVertex2f(x, y);
         for(i = 0; i <= triangleAmount;i++) { 
             glVertex2f(
                     x + (radius * cos(i *  twicePi / triangleAmount)), 
@@ -127,4 +128,15 @@ void drawFilledCircle(GLfloat x, GLfloat y, GLfloat radius){
             );
         }
     glEnd();
+}
+
+void keyboard(unsigned char key, int x, int y)
+{
+    switch(key){
+        case 'a': map->movePacman(LEFT); break;
+        case 'w': map->movePacman(UP); break;
+        case 'd': map->movePacman(RIGHT); break;
+        case 's': map->movePacman(DOWN); break;
+    };
+    glutPostRedisplay();
 }

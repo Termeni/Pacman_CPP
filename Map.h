@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "Cell.h"
 #include "Graph.h"
+#include "KeyboardKeys.h"
 
 using namespace std;
 
@@ -11,13 +12,14 @@ class Map{
     private:
         int rows;
         int columns;
+        int pacmanX, pacmanY;
         vector<vector<Cell> > map;
         
         void initialize();
         void createOuterBox();
         bool isOutterBorder(int i, int j);
         void createInnerBox();
-        bool isInnerBox(int i, int j);
+        
         bool isBoxUp(int i, int j);
         bool isBoxLeft(int i, int j);
         bool isBoxRight(int i, int j);
@@ -29,6 +31,7 @@ class Map{
         bool toCloseToTheBox(int x, int y);
         bool isCorridor(int x, int y);
         void putFood();
+        void putPacman();
 
         int getNumberOfCorridors();
         int getNumberOfWalls();
@@ -44,4 +47,7 @@ class Map{
         void print();
         bool isWall(int x, int y);
         bool hasFood(int x, int y);
+        bool isPacman(int x, int y);
+        bool isInnerBox(int i, int j);
+        void movePacman(int key);
 };
