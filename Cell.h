@@ -3,7 +3,10 @@
 #define CORRIDOR ' '
 #define FOOD '1'
 #define PACMAN '2'
-#define GHOST '3'
+#define GHOSTBLUE '3'
+#define GHOSTGREEN '4'
+#define GHOSTRED '5'
+#define GHOSTYELLOW '6'
 
 class Cell{
     private:
@@ -24,4 +27,14 @@ class Cell{
         bool hasFood();
         bool isPacman();
         void setPacman();
+
+        bool isBlueGhost();
+        bool isGreenGhost();
+        bool isYellowGhost();
+        bool isRedGhost();
+
+        void setBlueGhost();
+        void setGreenGhost();
+        void setYellowGhost();
+        void setRedGhost();
 };

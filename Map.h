@@ -13,6 +13,11 @@ class Map{
         int rows;
         int columns;
         int pacmanX, pacmanY;
+        int BlueGhostX, BlueGhostY;
+        int RedGhostX, RedGhostY;
+        int YellowGhostX, YellowGhostY;
+        int GreenGhostX, GreenGhostY;
+
         vector<vector<Cell> > map;
         
         void initialize();
@@ -32,6 +37,7 @@ class Map{
         bool isCorridor(int x, int y);
         void putFood();
         void putPacman();
+        void putGhosts();
 
         int getNumberOfCorridors();
         int getNumberOfWalls();
@@ -50,4 +56,9 @@ class Map{
         bool isPacman(int x, int y);
         bool isInnerBox(int i, int j);
         void movePacman(int key);
+        bool isBlueGhost(int i,int j);
+        bool isGreenGhost(int i,int j);
+        bool isRedGhost(int i,int j);
+        bool isYellowGhost(int i,int j);
+
 };

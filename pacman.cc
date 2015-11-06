@@ -18,6 +18,10 @@ void display();
 void keyboard(unsigned char key, int x, int y);
 
 void drawPacman(int i, int j);
+void drawBlueGhost(int i, int j);
+void drawGreenGhost(int i, int j);
+void drawRedGhost(int i, int j);
+void drawYellowGhost(int i, int j);
 void drawFood(int i, int j);
 void drawWall(int i, int j);
 Map *map;
@@ -61,17 +65,20 @@ void display()
   for(i=0;i<ROWS;i++)
     for(j=0;j<COLUMNS;j++)
       if( map->isWall(i,j)) {
-
             drawWall(i,j);
-
-      }else if (map->hasFood(i,j))
-      {
+      }else if (map->hasFood(i,j)){
             drawFood(i,j);
-
       }else if (map->isPacman(i,j)){
-
             drawPacman(i,j);
-      }      
+      }else if (map->isBlueGhost(i,j)){
+            drawBlueGhost(i,j);
+      }else if (map->isGreenGhost(i,j)){
+            drawGreenGhost(i,j);
+      }else if (map->isRedGhost(i,j)){
+            drawRedGhost(i,j);
+      }else if (map->isYellowGhost(i,j)){
+            drawYellowGhost(i,j);
+      }        
 
   glutSwapBuffers();
 
@@ -101,6 +108,45 @@ void drawPacman(int i, int j){
     drawFilledCircle(middleX,middleY,7.0);
     
 }
+
+void drawGreenGhost(int i, int j){
+    glColor3f(0.0,0.75,1.0);
+
+    int middleX = (((j+1)*WIDTH/COLUMNS)+(j*WIDTH/COLUMNS))/2; 
+    int middleY = (((ROWS-i)*HEIGHT/ROWS) + ((ROWS-1-i)*HEIGHT/ROWS))/2;
+
+    drawFilledCircle(middleX,middleY,7.0);
+
+}
+void drawRedGhost(int i, int j){
+    glColor3f(0.25,0.75,1.0);
+
+    int middleX = (((j+1)*WIDTH/COLUMNS)+(j*WIDTH/COLUMNS))/2; 
+    int middleY = (((ROWS-i)*HEIGHT/ROWS) + ((ROWS-1-i)*HEIGHT/ROWS))/2;
+
+    drawFilledCircle(middleX,middleY,7.0);
+
+}
+void drawYellowGhost(int i, int j){
+    glColor3f(0.0,0.4,0.7);
+
+    int middleX = (((j+1)*WIDTH/COLUMNS)+(j*WIDTH/COLUMNS))/2; 
+    int middleY = (((ROWS-i)*HEIGHT/ROWS) + ((ROWS-1-i)*HEIGHT/ROWS))/2;
+
+    drawFilledCircle(middleX,middleY,7.0);
+
+}
+
+void drawBlueGhost(int i, int j){
+    glColor3f(0.5,0.4,0.7);
+
+    int middleX = (((j+1)*WIDTH/COLUMNS)+(j*WIDTH/COLUMNS))/2; 
+    int middleY = (((ROWS-i)*HEIGHT/ROWS) + ((ROWS-1-i)*HEIGHT/ROWS))/2;
+
+    drawFilledCircle(middleX,middleY,7.0);
+
+}
+
 
 void drawFood(int i, int j){
 

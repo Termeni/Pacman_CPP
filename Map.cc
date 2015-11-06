@@ -27,6 +27,7 @@ void Map::initialize(){
    fillLabrynth();
    putFood();
    putPacman();
+   putGhosts();
 }
 
 void Map::createOuterBox(){
@@ -115,6 +116,7 @@ void Map::fillLeftSide(){
             }else{
                 map[randx][randy].setCorridor();
             }
+            free(graph);
         }
         saturation = walls/size;
         cout << saturation << endl;
@@ -235,6 +237,21 @@ bool Map::isCorridor(int x, int y){
     return map[x][y].isCorridor();
 }
 
+bool Map::isBlueGhost(int x,int y){
+    return map[x][y].isBlueGhost();
+}
+
+bool Map::isGreenGhost(int x,int y){
+    return map[x][y].isGreenGhost();
+}
+
+bool Map::isRedGhost(int x,int y){
+    return map[x][y].isRedGhost();
+}
+
+bool Map::isYellowGhost(int x,int y){
+    return map[x][y].isYellowGhost();
+}
 
 void Map::putPacman(){
     pacmanX = (rows/2)+5;
@@ -288,7 +305,6 @@ void Map::movePacman(int key){
 
 void Map::putFood(){
 
-    bool la=false;
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < columns; j++) {
             if(map[i][j].isCorridor() && !isInnerBox(i,j)){
@@ -296,6 +312,22 @@ void Map::putFood(){
             }
         }
     }
+}
+
+void Map::putGhosts(){
+    BlueGhostX= (rows/2)+1;
+    BlueGhostY= (columns/2)-3;
+    RedGhostX=(rows/2)+1;
+    RedGhostY=(columns/2)+3;
+    YellowGhostX=(rows/2)+3;
+    YellowGhostY=(columns/2)-3;
+    GreenGhostX=(rows/2)+3;
+    GreenGhostY=(columns/2)+3;
+
+    map[BlueGhostX][BlueGhostY].setBlueGhost();
+    map[RedGhostX][RedGhostY].setRedGhost();
+    map[YellowGhostX][YellowGhostY].setYellowGhost();
+    map[GreenGhostX][GreenGhostY].setGreenGhost();
 }
 
 bool Map::hasFood(int x, int y){

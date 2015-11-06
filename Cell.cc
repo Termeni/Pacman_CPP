@@ -54,3 +54,36 @@ bool Cell::isPacman(){
 void Cell::setPacman(){
     this->value = PACMAN;
 }
+
+bool Cell::isBlueGhost(){
+    return value == GHOSTBLUE;
+}
+
+bool Cell::isGreenGhost(){
+    return value == GHOSTGREEN;
+}
+
+bool Cell::isYellowGhost(){
+    return value == GHOSTYELLOW;
+}
+
+bool Cell::isRedGhost(){
+    return value == GHOSTRED;
+}
+
+void Cell::setBlueGhost(){
+    this->value = GHOSTBLUE;
+}
+
+void Cell::setGreenGhost(){
+    this->value = GHOSTGREEN;
+}
+
+void Cell::setYellowGhost(){
+    this->value = GHOSTYELLOW;
+}
+
+void Cell::setRedGhost(){
+    this->value = GHOSTRED;
+}
+
