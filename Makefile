@@ -1,7 +1,7 @@
 CC=g++
 CFLAGS=-c -Wall -framework OpenGL -framework GLUT
 LDFLAGS=-framework OpenGL -framework GLUT
-SOURCES=pacman.cc Cell.cc Map.cc Graph.cc
+SOURCES=pacman.cc Cell.cc Map.cc Graph.cc ParticlePacman.cc
 OBJECTS=$(SOURCES:.cc=.o)
 EXECUTABLE=pacman.exe
 

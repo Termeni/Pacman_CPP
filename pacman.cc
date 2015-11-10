@@ -3,6 +3,8 @@
 #include <GLUT/glut.h>
 #include <math.h>  
 #include "KeyboardKeys.h"
+#include "ParticlePacman.h"
+
 using namespace std;
 
 #define COLUMNS 35
@@ -11,6 +13,8 @@ using namespace std;
 #define HEIGHT 1000
 #define PI 3.14159265
 
+#define MOVE 1
+#define QUIET 2
 
 void drawFilledCircle(GLfloat x, GLfloat y, GLfloat radius);
 
@@ -24,7 +28,14 @@ void drawRedGhost(int i, int j);
 void drawYellowGhost(int i, int j);
 void drawFood(int i, int j);
 void drawWall(int i, int j);
+void movePacman(int key);
+
+void idle();
 Map *map;
+
+long last_t=0;
+
+ParticlePacman pacman;
 
 int main(int argc,char *argv[]) {
     
@@ -37,6 +48,16 @@ int main(int argc,char *argv[]) {
     
     cout << "Map generated." << endl;
 
+    int i,j;
+    for(i=0;i<ROWS;i++){
+    for(j=0;j<COLUMNS;j++){
+      if (map->isPacman(i,j)){
+            pacman.set_position(i,j);
+
+      }        
+    }
+  }
+
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
     glutInitWindowPosition(50, 50);
@@ -47,7 +68,7 @@ int main(int argc,char *argv[]) {
 
     glMatrixMode(GL_PROJECTION);
     gluOrtho2D(0,WIDTH-1,0,HEIGHT-1);
-
+    glutIdleFunc(idle);
     glutKeyboardFunc(keyboard);
     glutMainLoop();
 
@@ -69,7 +90,7 @@ void display()
       }else if (map->hasFood(i,j)){
             drawFood(i,j);
       }else if (map->isPacman(i,j)){
-            drawPacman(i,j);
+            //drawPacman(i,j);
       }else if (map->isBlueGhost(i,j)){
             drawBlueGhost(i,j);
       }else if (map->isGreenGhost(i,j)){
@@ -81,6 +102,7 @@ void display()
       }        
     }
   }
+  pacman.draw();
   glutSwapBuffers();
 
 }
@@ -180,10 +202,88 @@ void drawFilledCircle(GLfloat x, GLfloat y, GLfloat radius){
 void keyboard(unsigned char key, int x, int y)
 {
     switch(key){
-        case 'a': map->movePacman(LEFT); break;
-        case 'w': map->movePacman(UP); break;
-        case 'd': map->movePacman(RIGHT); break;
-        case 's': map->movePacman(DOWN); break;
+        case 'a': movePacman(LEFT); break;
+        case 'w': movePacman(UP); break;
+        case 'd': movePacman(RIGHT); break;
+        case 's': movePacman(DOWN); break;
     };
     glutPostRedisplay();
 }
+
+
+void movePacman(int key){
+
+
+    switch(key)
+    {
+        case LEFT: 
+            if (!map->isWall(map->pacmanX,map->pacmanY-1) && pacman.state == QUIET)
+            {
+                //cout << "Pacman y" << map->pacmanY << endl;
+                pacman.init_movement(map->pacmanX,map->pacmanY-1,100);
+                map->setCorridor(map->pacmanX,map->pacmanY);
+                map->setPacman(map->pacmanX,(map->pacmanY)-1);
+                //map->pacmanY=map->pacmanY-1;
+            }
+        break;
+
+        case UP: 
+            if (!map->isWall(map->pacmanX-1,map->pacmanY) && pacman.state == QUIET)
+            {
+
+                pacman.init_movement(map->pacmanX-1,map->pacmanY,100);
+                map->setCorridor(map->pacmanX,map->pacmanY);
+                map->setPacman(map->pacmanX-1,(map->pacmanY));
+            }
+        break;
+
+        case RIGHT: 
+            if (!map->isWall(map->pacmanX,map->pacmanY+1) && pacman.state == QUIET)
+            {
+                pacman.init_movement(map->pacmanX,map->pacmanY+1,100);
+                map->setCorridor(map->pacmanX,map->pacmanY);
+                map->setPacman(map->pacmanX,(map->pacmanY)+1);
+            }
+        break;
+
+        case DOWN: 
+            if (!map->isWall(map->pacmanX+1,map->pacmanY) && pacman.state == QUIET)
+            {
+
+                pacman.init_movement(map->pacmanX+1,map->pacmanY,100);
+                map->setCorridor(map->pacmanX,map->pacmanY);
+                map->setPacman(map->pacmanX+1,(map->pacmanY));
+            }
+            break;
+            
+    }
+}
+
+
+void idle()
+{
+  long t;
+
+  t=glutGet(GLUT_ELAPSED_TIME); 
+
+  if(last_t==0)
+    last_t=t;
+  else
+    {
+      pacman.integrate(t-last_t);
+      last_t=t;
+    }
+
+
+  glutPostRedisplay();
+}
+
+
+
+
+
+
+
+
+
+

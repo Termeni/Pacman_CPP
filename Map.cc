@@ -334,6 +334,15 @@ bool Map::hasFood(int x, int y){
     return map[x][y].hasFood();
 }
 
+void Map::setCorridor(int x,int y){
+    map[x][y].setCorridor();
+}
+void Map::setPacman(int x, int y){
+    this->pacmanX=x;
+    this->pacmanY=y;
+    map[pacmanX][pacmanY].setPacman();
+}
+
 //TODO: S'ha de refinar un pelet
 void Map::unlockAlley(int x, int y){
     if( map[x+1][y].isWall() && map[x-1][y].isWall()){
