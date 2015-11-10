@@ -316,13 +316,13 @@ void Map::putFood(){
 
 void Map::putGhosts(){
     BlueGhostX= (rows/2)+1;
-    BlueGhostY= (columns/2)-3;
+    BlueGhostY= (columns/2)-2;
     RedGhostX=(rows/2)+1;
-    RedGhostY=(columns/2)+3;
+    RedGhostY=(columns/2)+2;
     YellowGhostX=(rows/2)+3;
-    YellowGhostY=(columns/2)-3;
+    YellowGhostY=(columns/2)-2;
     GreenGhostX=(rows/2)+3;
-    GreenGhostY=(columns/2)+3;
+    GreenGhostY=(columns/2)+2;
 
     map[BlueGhostX][BlueGhostY].setBlueGhost();
     map[RedGhostX][RedGhostY].setRedGhost();

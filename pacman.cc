@@ -62,8 +62,8 @@ void display()
   glClearColor(0.0,0.0,0.0,0.0);
   glClear(GL_COLOR_BUFFER_BIT);
 
-  for(i=0;i<ROWS;i++)
-    for(j=0;j<COLUMNS;j++)
+  for(i=0;i<ROWS;i++){
+    for(j=0;j<COLUMNS;j++){
       if( map->isWall(i,j)) {
             drawWall(i,j);
       }else if (map->hasFood(i,j)){
@@ -79,7 +79,8 @@ void display()
       }else if (map->isYellowGhost(i,j)){
             drawYellowGhost(i,j);
       }        
-
+    }
+  }
   glutSwapBuffers();
 
 }
