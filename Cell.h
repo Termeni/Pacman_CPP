@@ -37,4 +37,6 @@ class Cell{
         void setGreenGhost();
         void setYellowGhost();
         void setRedGhost();
+
+        bool isGhost();
 };

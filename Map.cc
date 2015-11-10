@@ -371,3 +371,7 @@ void Map::print(){
         cout << endl;
     }
 }
+
+bool Map::isGhost(int x, int y){
+    return map[x][y].isGhost();
+}

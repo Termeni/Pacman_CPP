@@ -63,5 +63,6 @@ class Map{
         bool isYellowGhost(int i,int j);
         void setCorridor(int x,int y);
         void setPacman(int x, int y);
+        bool isGhost(int x, int y);
 
 };

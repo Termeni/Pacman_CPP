@@ -79,7 +79,6 @@ int main(int argc,char *argv[]) {
 void display()
 {
   int i,j;
-
   glClearColor(0.0,0.0,0.0,0.0);
   glClear(GL_COLOR_BUFFER_BIT);
 
@@ -219,6 +218,10 @@ void movePacman(int key){
         case LEFT: 
             if (!map->isWall(map->pacmanX,map->pacmanY-1) && pacman.state == QUIET)
             {
+
+                if(map->isGhost(map->pacmanX,map->pacmanY-1)){
+                    exit(0);
+                }
                 //cout << "Pacman y" << map->pacmanY << endl;
                 pacman.init_movement(map->pacmanX,map->pacmanY-1,100);
                 map->setCorridor(map->pacmanX,map->pacmanY);
@@ -230,6 +233,9 @@ void movePacman(int key){
         case UP: 
             if (!map->isWall(map->pacmanX-1,map->pacmanY) && pacman.state == QUIET)
             {
+                if(map->isGhost(map->pacmanX-1,map->pacmanY)){
+                    exit(0);
+                }
 
                 pacman.init_movement(map->pacmanX-1,map->pacmanY,100);
                 map->setCorridor(map->pacmanX,map->pacmanY);
@@ -240,6 +246,10 @@ void movePacman(int key){
         case RIGHT: 
             if (!map->isWall(map->pacmanX,map->pacmanY+1) && pacman.state == QUIET)
             {
+                if(map->isGhost(map->pacmanX,map->pacmanY+1)){
+                    exit(0);
+                }
+
                 pacman.init_movement(map->pacmanX,map->pacmanY+1,100);
                 map->setCorridor(map->pacmanX,map->pacmanY);
                 map->setPacman(map->pacmanX,(map->pacmanY)+1);
@@ -249,6 +259,9 @@ void movePacman(int key){
         case DOWN: 
             if (!map->isWall(map->pacmanX+1,map->pacmanY) && pacman.state == QUIET)
             {
+                if(map->isGhost(map->pacmanX+1,map->pacmanY)){
+                    exit(0);
+                }
 
                 pacman.init_movement(map->pacmanX+1,map->pacmanY,100);
                 map->setCorridor(map->pacmanX,map->pacmanY);

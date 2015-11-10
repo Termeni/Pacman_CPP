@@ -87,3 +87,7 @@ void Cell::setRedGhost(){
     this->value = GHOSTRED;
 }
 
+bool Cell::isGhost(){
+    return value == GHOSTBLUE || value == GHOSTGREEN || value == GHOSTYELLOW || value == GHOSTRED;
+}
+
