@@ -12,6 +12,7 @@ class Cell{
     private:
         char value;
         int id;
+        bool food;
     public:
         Cell();
         Cell(char value);
@@ -27,6 +28,7 @@ class Cell{
         bool hasFood();
         bool isPacman();
         void setPacman();
+        void eatFood();
 
         bool isBlueGhost();
         bool isGreenGhost();

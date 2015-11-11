@@ -2,10 +2,12 @@
 
 Cell::Cell(){
     this->value = ' ';
+    this->food = false;
 }
 
 Cell::Cell(char value){
     this->value = value;
+    this->food = false;
 }
 
 void Cell::setId(int id){
@@ -41,11 +43,11 @@ void Cell::setCorridor(){
 }
 
 void Cell::setFood(){
-    this->value = FOOD;
+    this->food = true;
 }
 
 bool Cell::hasFood(){
-    return value == FOOD;
+    return food;
 }
 
 bool Cell::isPacman(){
@@ -53,6 +55,10 @@ bool Cell::isPacman(){
 }
 void Cell::setPacman(){
     this->value = PACMAN;
+}
+
+void Cell::eatFood(){
+    this->food = false;
 }
 
 bool Cell::isBlueGhost(){

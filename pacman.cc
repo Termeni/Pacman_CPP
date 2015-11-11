@@ -224,7 +224,7 @@ void movePacman(int key){
                 }
                 //cout << "Pacman y" << map->pacmanY << endl;
                 pacman.init_movement(map->pacmanX,map->pacmanY-1,100);
-                map->setCorridor(map->pacmanX,map->pacmanY);
+                
                 map->setPacman(map->pacmanX,(map->pacmanY)-1);
                 //map->pacmanY=map->pacmanY-1;
             }
@@ -238,7 +238,7 @@ void movePacman(int key){
                 }
 
                 pacman.init_movement(map->pacmanX-1,map->pacmanY,100);
-                map->setCorridor(map->pacmanX,map->pacmanY);
+                
                 map->setPacman(map->pacmanX-1,(map->pacmanY));
             }
         break;
@@ -251,7 +251,7 @@ void movePacman(int key){
                 }
 
                 pacman.init_movement(map->pacmanX,map->pacmanY+1,100);
-                map->setCorridor(map->pacmanX,map->pacmanY);
+                
                 map->setPacman(map->pacmanX,(map->pacmanY)+1);
             }
         break;
@@ -264,7 +264,7 @@ void movePacman(int key){
                 }
 
                 pacman.init_movement(map->pacmanX+1,map->pacmanY,100);
-                map->setCorridor(map->pacmanX,map->pacmanY);
+                
                 map->setPacman(map->pacmanX+1,(map->pacmanY));
             }
             break;

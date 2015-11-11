@@ -341,6 +341,7 @@ void Map::setPacman(int x, int y){
     this->pacmanX=x;
     this->pacmanY=y;
     map[pacmanX][pacmanY].setPacman();
+    map[pacmanX][pacmanY].eatFood();
 }
 
 //TODO: S'ha de refinar un pelet
