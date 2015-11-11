@@ -6,6 +6,7 @@ Map::Map(int rows, int columns){
     this->rows = rows;
     this->columns = columns;
     int id=0;
+    food=0;
     vector<vector<Cell> >vector_rows(rows);
     for (int i = 0; i < rows; i++) {
         vector<Cell> vector_columns(columns);
@@ -119,7 +120,7 @@ void Map::fillLeftSide(){
             free(graph);
         }
         saturation = walls/size;
-        cout << saturation << endl;
+        //cout << saturation << endl;
     }while(saturation<0.35);
 }
 
@@ -257,7 +258,10 @@ void Map::putPacman(){
     pacmanX = (rows/2)+5;
     pacmanY = columns/2;
 
-    map[pacmanX][pacmanY].setPacman();   
+    map[pacmanX][pacmanY].setPacman();
+    map[pacmanX][pacmanY].eatFood(); 
+
+    food= food - 1;  
 }
 
 void Map::movePacman(int key){
@@ -303,12 +307,21 @@ void Map::movePacman(int key){
     }
 }
 
+bool Map::isInsideBox(int x, int y){
+    if( x>rows/2-1 && x<rows/2+5 && y>columns/2-4 && y<columns/2+3){
+        return true;
+    }else{
+        return false;
+    }
+}
+
 void Map::putFood(){
 
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < columns; j++) {
-            if(map[i][j].isCorridor() && !isInnerBox(i,j)){
+            if(map[i][j].isCorridor() && !isInsideBox(i,j)){
                 map[i][j].setFood();
+                food=food+1;
             }
         }
     }
@@ -316,7 +329,7 @@ void Map::putFood(){
 
 void Map::putGhosts(){
     BlueGhostX= (rows/2)+1;
-    BlueGhostY= (columns/2)-2;
+    BlueGhostY= (columns/2);
     RedGhostX=(rows/2)+1;
     RedGhostY=(columns/2)+2;
     YellowGhostX=(rows/2)+3;
@@ -325,9 +338,9 @@ void Map::putGhosts(){
     GreenGhostY=(columns/2)+2;
 
     map[BlueGhostX][BlueGhostY].setBlueGhost();
-    map[RedGhostX][RedGhostY].setRedGhost();
-    map[YellowGhostX][YellowGhostY].setYellowGhost();
-    map[GreenGhostX][GreenGhostY].setGreenGhost();
+    //map[RedGhostX][RedGhostY].setRedGhost();
+    //map[YellowGhostX][YellowGhostY].setYellowGhost();
+    //map[GreenGhostX][GreenGhostY].setGreenGhost();
 }
 
 bool Map::hasFood(int x, int y){
@@ -341,7 +354,26 @@ void Map::setPacman(int x, int y){
     this->pacmanX=x;
     this->pacmanY=y;
     map[pacmanX][pacmanY].setPacman();
-    map[pacmanX][pacmanY].eatFood();
+
+    if (map[pacmanX][pacmanY].hasFood())
+    {
+        map[pacmanX][pacmanY].eatFood();
+
+        if (food>1)
+        {
+            cout<<food<<endl;
+            food= food - 1;
+        }else{
+            exit(0);
+        }
+    }
+  
+}
+
+void Map::setBlueGhost(int x, int y){
+    this->BlueGhostX=x;
+    this->BlueGhostY=y;
+    map[BlueGhostX][BlueGhostY].setBlueGhost();
 }
 
 //TODO: S'ha de refinar un pelet

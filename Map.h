@@ -13,7 +13,8 @@ class Map{
         int rows;
         int columns;
         
-        int BlueGhostX, BlueGhostY;
+        int food;
+
         int RedGhostX, RedGhostY;
         int YellowGhostX, YellowGhostY;
         int GreenGhostX, GreenGhostY;
@@ -38,6 +39,7 @@ class Map{
         void putFood();
         void putPacman();
         void putGhosts();
+        bool isInsideBox(int x, int y);
 
         int getNumberOfCorridors();
         int getNumberOfWalls();
@@ -51,6 +53,7 @@ class Map{
     public:
         Map(int rows, int columns);
         int pacmanX, pacmanY;
+        int BlueGhostX, BlueGhostY;
         void print();
         bool isWall(int x, int y);
         bool hasFood(int x, int y);
@@ -63,6 +66,7 @@ class Map{
         bool isYellowGhost(int i,int j);
         void setCorridor(int x,int y);
         void setPacman(int x, int y);
+        void setBlueGhost(int x, int y);
         bool isGhost(int x, int y);
 
 };

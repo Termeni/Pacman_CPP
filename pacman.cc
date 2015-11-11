@@ -4,6 +4,7 @@
 #include <math.h>  
 #include "KeyboardKeys.h"
 #include "ParticlePacman.h"
+#include "ParticleGhost.h"
 
 using namespace std;
 
@@ -29,6 +30,7 @@ void drawYellowGhost(int i, int j);
 void drawFood(int i, int j);
 void drawWall(int i, int j);
 void movePacman(int key);
+bool moveGhost(int key);
 
 void idle();
 Map *map;
@@ -36,6 +38,7 @@ Map *map;
 long last_t=0;
 
 ParticlePacman pacman;
+ParticleGhost ghost;
 
 int main(int argc,char *argv[]) {
     
@@ -54,9 +57,13 @@ int main(int argc,char *argv[]) {
       if (map->isPacman(i,j)){
             pacman.set_position(i,j);
 
+      }
+      if(map->isBlueGhost(i,j)){
+        ghost.set_position(i,j);
       }        
     }
-  }
+    }
+
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
@@ -90,18 +97,31 @@ void display()
             drawFood(i,j);
       }else if (map->isPacman(i,j)){
             //drawPacman(i,j);
-      }else if (map->isBlueGhost(i,j)){
+      }
+      /*if (map->isBlueGhost(i,j)){
             drawBlueGhost(i,j);
-      }else if (map->isGreenGhost(i,j)){
+      }if (map->isGreenGhost(i,j)){
             drawGreenGhost(i,j);
-      }else if (map->isRedGhost(i,j)){
+      }if (map->isRedGhost(i,j)){
             drawRedGhost(i,j);
-      }else if (map->isYellowGhost(i,j)){
+      }if (map->isYellowGhost(i,j)){
             drawYellowGhost(i,j);
-      }        
+      } */       
     }
   }
+
   pacman.draw();
+  if(ghost.state == QUIET){
+    bool flag = false;
+    //cout << "Fora" << endl;
+    
+        ghost.move();
+        flag = moveGhost(ghost.direction);
+    
+    //cout << "Fora" << endl;
+    
+  }
+  ghost.draw();
   glutSwapBuffers();
 
 }
@@ -224,7 +244,7 @@ void movePacman(int key){
                 }
                 //cout << "Pacman y" << map->pacmanY << endl;
                 pacman.init_movement(map->pacmanX,map->pacmanY-1,100);
-                
+                map->setCorridor(map->pacmanX,map->pacmanY);
                 map->setPacman(map->pacmanX,(map->pacmanY)-1);
                 //map->pacmanY=map->pacmanY-1;
             }
@@ -238,7 +258,7 @@ void movePacman(int key){
                 }
 
                 pacman.init_movement(map->pacmanX-1,map->pacmanY,100);
-                
+                map->setCorridor(map->pacmanX,map->pacmanY);
                 map->setPacman(map->pacmanX-1,(map->pacmanY));
             }
         break;
@@ -251,7 +271,7 @@ void movePacman(int key){
                 }
 
                 pacman.init_movement(map->pacmanX,map->pacmanY+1,100);
-                
+                map->setCorridor(map->pacmanX,map->pacmanY);
                 map->setPacman(map->pacmanX,(map->pacmanY)+1);
             }
         break;
@@ -264,9 +284,85 @@ void movePacman(int key){
                 }
 
                 pacman.init_movement(map->pacmanX+1,map->pacmanY,100);
-                
+                map->setCorridor(map->pacmanX,map->pacmanY);
                 map->setPacman(map->pacmanX+1,(map->pacmanY));
             }
+            break;
+            
+    }
+}
+
+bool moveGhost(int key){
+
+
+    switch(key)
+    {
+        case LEFT: 
+            if (!map->isWall(map->BlueGhostX,map->BlueGhostY-1))
+            {
+
+                if(map->isPacman(map->BlueGhostX,map->BlueGhostY-1)){
+                    exit(0);
+                }
+                //cout << "Pacman y" << map->pacmanY << endl;
+                ghost.init_movement(map->BlueGhostX,map->BlueGhostY-1,100);
+                map->setCorridor(map->BlueGhostX,map->BlueGhostY);
+                map->setBlueGhost(map->BlueGhostX,(map->BlueGhostY)-1);
+                //map->pacmanY=map->pacmanY-1;
+                return true;
+            }
+            return false;
+        break;
+
+        case UP: 
+            if (!map->isWall(map->BlueGhostX-1,map->BlueGhostY))
+            {
+
+                if(map->isPacman(map->BlueGhostX-1,map->BlueGhostY)){
+                    exit(0);
+                }
+                //cout << "Pacman y" << map->pacmanY << endl;
+                ghost.init_movement(map->BlueGhostX-1,map->BlueGhostY,100);
+                map->setCorridor(map->BlueGhostX,map->BlueGhostY);
+                map->setBlueGhost(map->BlueGhostX-1,(map->BlueGhostY));
+                //map->pacmanY=map->pacmanY-1;
+                return true;
+            }
+            return false;
+        break;
+
+        case RIGHT: 
+            if (!map->isWall(map->BlueGhostX,map->BlueGhostY+1))
+            {
+
+                if(map->isPacman(map->BlueGhostX,map->BlueGhostY+1)){
+                    exit(0);
+                }
+                //cout << "Pacman y" << map->pacmanY << endl;
+                ghost.init_movement(map->BlueGhostX,map->BlueGhostY+1,100);
+                map->setCorridor(map->BlueGhostX,map->BlueGhostY);
+                map->setBlueGhost(map->BlueGhostX,(map->BlueGhostY)+1);
+                //map->pacmanY=map->pacmanY-1;
+                return true;
+            }
+            return false;
+        break;
+
+        case DOWN: 
+            if (!map->isWall(map->BlueGhostX+1,map->BlueGhostY))
+            {
+
+                if(map->isPacman(map->BlueGhostX+1,map->BlueGhostY)){
+                    exit(0);
+                }
+                //cout << "Pacman y" << map->pacmanY << endl;
+                ghost.init_movement(map->BlueGhostX+1,map->BlueGhostY,100);
+                map->setCorridor(map->BlueGhostX,map->BlueGhostY);
+                map->setBlueGhost(map->BlueGhostX+1,(map->BlueGhostY));
+                //map->pacmanY=map->pacmanY-1;
+                return true;
+            }
+            return false;
             break;
             
     }
@@ -284,6 +380,7 @@ void idle()
   else
     {
       pacman.integrate(t-last_t);
+      ghost.integrate(t-last_t);
       last_t=t;
     }
 
