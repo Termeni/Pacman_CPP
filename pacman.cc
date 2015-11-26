@@ -5,11 +5,12 @@
 #include "KeyboardKeys.h"
 #include "ParticlePacman.h"
 #include "ParticleGhost.h"
+#import <OpenGL/gl.h>
 
 using namespace std;
 
-#define COLUMNS 35
-#define ROWS 35
+#define COLUMNS 25
+#define ROWS 25
 #define WIDTH 1000
 #define HEIGHT 1000
 #define PI 3.14159265
@@ -32,6 +33,8 @@ void drawWall(int i, int j);
 void movePacman(int key);
 bool moveGhost(int key);
 
+void PositionObserver(float alpha,float beta,int radi);
+
 void idle();
 Map *map;
 
@@ -39,6 +42,9 @@ long last_t=0;
 
 ParticlePacman pacman;
 ParticleGhost ghost;
+
+int anglealpha = 35;
+int anglebeta = 35;
 
 int main(int argc,char *argv[]) {
     
@@ -66,10 +72,11 @@ int main(int argc,char *argv[]) {
 
 
     glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowPosition(50, 50);
     glutInitWindowSize(WIDTH, HEIGHT);
     glutCreateWindow("Pacman");
+    glEnable(GL_DEPTH_TEST);
 
     glutDisplayFunc(display);
 
@@ -87,7 +94,18 @@ void display()
 {
   int i,j;
   glClearColor(0.0,0.0,0.0,0.0);
-  glClear(GL_COLOR_BUFFER_BIT);
+  glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+
+  PositionObserver(anglealpha,anglebeta,250);
+
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  glOrtho(-WIDTH*0.6,WIDTH*0.6,-HEIGHT*0.6,HEIGHT*0.6,10,2000);
+
+  glMatrixMode(GL_MODELVIEW);
 
   for(i=0;i<ROWS;i++){
     for(j=0;j<COLUMNS;j++){
@@ -128,16 +146,54 @@ void display()
 
 void drawWall(int i, int j){
 
+    int wall_size = 20;
+
+    glPolygonMode(GL_FRONT,GL_FILL);
+    glPolygonMode(GL_BACK,GL_LINE);
+
     glColor3f(0.0,0.0,1.0);
             //glColor3f(0.0,0.0,0.0);
     glBegin(GL_QUADS);
 
-    glVertex2i((j+1)*WIDTH/COLUMNS,(ROWS-1-i)*HEIGHT/ROWS); 
-    glVertex2i(j*WIDTH/COLUMNS, (ROWS-1-i)*HEIGHT/ROWS); 
-    glVertex2i(j*WIDTH/COLUMNS, (ROWS-i)*HEIGHT/ROWS); 
-    glVertex2i((j+1)*WIDTH/COLUMNS,(ROWS-i)*HEIGHT/ROWS); 
-            
+    glVertex3i((j+1)*WIDTH/COLUMNS,(ROWS-1-i)*HEIGHT/ROWS, wall_size); 
+    glVertex3i((j*WIDTH/COLUMNS), (ROWS-1-i)*HEIGHT/ROWS, wall_size); 
+    glVertex3i((j*WIDTH/COLUMNS), ((ROWS-i)*HEIGHT/ROWS), wall_size); 
+    glVertex3i((j+1)*WIDTH/COLUMNS,(ROWS-i)*HEIGHT/ROWS, wall_size);
+
     glEnd();
+
+    glColor3f(0.0,0.0,1.0);
+    glBegin(GL_QUADS);
+    glVertex3i((j+1)*WIDTH/COLUMNS,((ROWS-1-i)*HEIGHT/ROWS), -1 * wall_size); 
+    glVertex3i(j*WIDTH/COLUMNS, ((ROWS-1-i)*HEIGHT/ROWS), -1 * wall_size); 
+    glVertex3i((j*WIDTH/COLUMNS), (ROWS-i)*HEIGHT/ROWS,  -1 * wall_size); 
+    glVertex3i((j+1)*WIDTH/COLUMNS,(ROWS-i)*HEIGHT/ROWS, -1 * wall_size);  
+    glEnd();
+
+    glColor3f(0.0,0.0,1.0);
+    glBegin(GL_QUADS);
+    glVertex3i((j+1)*WIDTH/COLUMNS,((ROWS-1-i)*HEIGHT/ROWS), wall_size); 
+    glVertex3i(j*WIDTH/COLUMNS, ((ROWS-1-i)*HEIGHT/ROWS), -1 * wall_size); 
+    glVertex3i((j*WIDTH/COLUMNS), (ROWS-i)*HEIGHT/ROWS,  -1 * wall_size); 
+    glVertex3i((j+1)*WIDTH/COLUMNS,(ROWS-i)*HEIGHT/ROWS, wall_size);  
+    glEnd();
+//
+    glColor3f(0.0,0.0,1.0);
+    glBegin(GL_QUADS);
+    glVertex3i(((j+1)*WIDTH/COLUMNS),((ROWS-1-i)*HEIGHT/ROWS), -1 * wall_size); 
+    glVertex3i((j*WIDTH/COLUMNS), ((ROWS-1-i)*HEIGHT/ROWS),  wall_size); 
+    glVertex3i(((j*WIDTH/COLUMNS)), ((ROWS-i)*HEIGHT/ROWS),  wall_size); 
+    glVertex3i(((j+1)*WIDTH/COLUMNS),((ROWS-i)*HEIGHT/ROWS), -1 * wall_size);  
+    glEnd();
+
+    glColor3f(0.0,0.0,1.0);
+    glBegin(GL_QUADS);
+    glVertex3i(((j+1)*WIDTH/COLUMNS),((ROWS-1-i)*HEIGHT/ROWS), -1 * wall_size); 
+    glVertex3i((j*WIDTH/COLUMNS), ((ROWS-1-i)*HEIGHT/ROWS),  -1 * wall_size); 
+    glVertex3i(((j*WIDTH/COLUMNS)), ((ROWS-i)*HEIGHT/ROWS),   wall_size); 
+    glVertex3i(((j+1)*WIDTH/COLUMNS),((ROWS-i)*HEIGHT/ROWS), wall_size);  
+    glEnd();
+
 }
 
 void drawPacman(int i, int j){
@@ -226,6 +282,17 @@ void keyboard(unsigned char key, int x, int y)
         case 'd': movePacman(RIGHT); break;
         case 's': movePacman(DOWN); break;
     };
+
+    if (key=='i' && anglebeta<=(90-4))
+        anglebeta=(anglebeta+3);
+    else if (key=='k' && anglebeta>=(-90+4))
+        anglebeta=anglebeta-3;
+    else if (key=='j')
+        anglealpha=(anglealpha+3)%360;
+    else if (key=='l')
+        anglealpha=(anglealpha-3+360)%360;
+
+
     glutPostRedisplay();
 }
 
@@ -386,6 +453,45 @@ void idle()
 
 
   glutPostRedisplay();
+}
+
+void PositionObserver(float alpha,float beta,int radi)
+{
+  float x,y,z;
+  float upx,upy,upz;
+  float modul;
+
+  x = (float)radi*cos(alpha*2*PI/360.0)*cos(beta*2*PI/360.0);
+  y = (float)radi*sin(beta*2*PI/360.0);
+  z = (float)radi*sin(alpha*2*PI/360.0)*cos(beta*2*PI/360.0);
+
+  if (beta>0)
+    {
+      upx=-x;
+      upz=-z;
+      upy=(x*x+z*z)/y;
+    }
+  else if(beta==0)
+    {
+      upx=0;
+      upy=1;
+      upz=0;
+    }
+  else
+    {
+      upx=x;
+      upz=z;
+      upy=-(x*x+z*z)/y;
+    }
+
+
+  modul=sqrt(upx*upx+upy*upy+upz*upz);
+
+  upx=upx/modul;
+  upy=upy/modul;
+  upz=upz/modul;
+
+  gluLookAt(x,y,z,    0.0, 0.0, 0.0,     upx,upy,upz);
 }
 
 
