@@ -157,7 +157,18 @@ void drawWall(int i, int j){
 
     glColor3f(1.0,0.0,0.0);
             //glColor3f(0.0,0.0,0.0);
-/*
+
+    //top
+    glBegin(GL_QUADS);
+
+    glVertex3i((j+1)*WIDTH/COLUMNS,(ROWS-i)*HEIGHT/ROWS, 0);
+    glVertex3i((j*WIDTH/COLUMNS), ((ROWS-i)*HEIGHT/ROWS), 0);
+    glVertex3i((j*WIDTH/COLUMNS), (ROWS-1-i)*HEIGHT/ROWS, 0); 
+    glVertex3i((j+1)*WIDTH/COLUMNS,(ROWS-1-i)*HEIGHT/ROWS, 0); 
+
+    glEnd();
+
+    glColor3f(1.0,1.0,1.0);
     //below
     glBegin(GL_QUADS);
 
@@ -167,113 +178,65 @@ void drawWall(int i, int j){
     glVertex3i((j+1)*WIDTH/COLUMNS,(ROWS-1-i)*HEIGHT/ROWS, wall_size); 
 
     glEnd();
-*/
+
+    //front
     glColor3f(0.0,0.0,1.0);
     glBegin(GL_QUADS);
 
-    glVertex3i((j+1)*WIDTH/COLUMNS,(ROWS-1-i)*HEIGHT/ROWS, wall_size); 
-    glVertex3i((j*WIDTH/COLUMNS), (ROWS-1-i)*HEIGHT/ROWS, wall_size);
-    glVertex3i((j*WIDTH/COLUMNS), (ROWS-1-i)*HEIGHT/ROWS, 0); 
     glVertex3i((j+1)*WIDTH/COLUMNS,(ROWS-1-i)*HEIGHT/ROWS, 0);
+    glVertex3i((j*WIDTH/COLUMNS), (ROWS-1-i)*HEIGHT/ROWS, 0); 
+    glVertex3i((j*WIDTH/COLUMNS), (ROWS-1-i)*HEIGHT/ROWS, wall_size);
+    glVertex3i((j+1)*WIDTH/COLUMNS,(ROWS-1-i)*HEIGHT/ROWS, wall_size); 
+    
+    
+    
 
     glEnd();
 
-
+    //back
     glColor3f(1.0,0.0,1.0);
 
     glBegin(GL_QUADS);
 
-    glVertex3i((j+1)*WIDTH/COLUMNS,(ROWS-i)*HEIGHT/ROWS, 0);
-    glVertex3i((j*WIDTH/COLUMNS), ((ROWS-i)*HEIGHT/ROWS), 0);
-    glVertex3i((j*WIDTH/COLUMNS), ((ROWS-i)*HEIGHT/ROWS), wall_size);
     glVertex3i((j+1)*WIDTH/COLUMNS,(ROWS-i)*HEIGHT/ROWS, wall_size);
+    glVertex3i((j*WIDTH/COLUMNS), ((ROWS-i)*HEIGHT/ROWS), wall_size);
+    glVertex3i((j*WIDTH/COLUMNS), ((ROWS-i)*HEIGHT/ROWS), 0);
+    glVertex3i((j+1)*WIDTH/COLUMNS,(ROWS-i)*HEIGHT/ROWS, 0);
+    
+    
+    
     
     glEnd();
-/*
+
     glColor3f(0.0,1.0,0.0);
 
     //right
     glBegin(GL_QUADS);
 
-    glVertex3i((j+1)*WIDTH/COLUMNS,(ROWS-i)*HEIGHT/ROWS, wall_size);
-    glVertex3i((j+1)*WIDTH/COLUMNS,(ROWS-1-i)*HEIGHT/ROWS, wall_size); 
-    glVertex3i((j+1)*WIDTH/COLUMNS,(ROWS-1-i)*HEIGHT/ROWS, 0);
     glVertex3i((j+1)*WIDTH/COLUMNS,(ROWS-i)*HEIGHT/ROWS, 0);
+    glVertex3i((j+1)*WIDTH/COLUMNS,(ROWS-1-i)*HEIGHT/ROWS, 0);
+    glVertex3i((j+1)*WIDTH/COLUMNS,(ROWS-1-i)*HEIGHT/ROWS, wall_size); 
+    glVertex3i((j+1)*WIDTH/COLUMNS,(ROWS-i)*HEIGHT/ROWS, wall_size);
+
+    
     glEnd();
-*/
+
 
     glColor3f(1.0,1.0,0.0);
     //left
     glBegin(GL_QUADS);
 
-    glVertex3i((j*WIDTH/COLUMNS), (ROWS-1-i)*HEIGHT/ROWS, wall_size); 
-    glVertex3i((j*WIDTH/COLUMNS), ((ROWS-i)*HEIGHT/ROWS), wall_size);
+    glVertex3i((j*WIDTH/COLUMNS), (ROWS-1-i)*HEIGHT/ROWS, 0); 
     glVertex3i((j*WIDTH/COLUMNS), ((ROWS-i)*HEIGHT/ROWS), 0);
-    glVertex3i((j*WIDTH/COLUMNS), (ROWS-1-i)*HEIGHT/ROWS, 0); 
-
-    glEnd();
-
-/*
-    //front
-    glBegin(GL_QUADS);
-
-    glVertex3i((j*WIDTH/COLUMNS), (ROWS-1-i)*HEIGHT/ROWS, 0); 
-    glVertex3i((j+1)*WIDTH/COLUMNS,(ROWS-1-i)*HEIGHT/ROWS, 0);
-    glVertex3i((j*WIDTH/COLUMNS), (ROWS-1-i)*HEIGHT/ROWS, wall_size); 
-    glVertex3i((j+1)*WIDTH/COLUMNS,(ROWS-1-i)*HEIGHT/ROWS, wall_size); 
-
-    glEnd();
-/*
-    //below
-    glBegin(GL_QUADS);
-
-    glVertex3i((j+1)*WIDTH/COLUMNS,(ROWS-i)*HEIGHT/ROWS, wall_size);
     glVertex3i((j*WIDTH/COLUMNS), ((ROWS-i)*HEIGHT/ROWS), wall_size);
-    glVertex3i((j*WIDTH/COLUMNS), (wall_size) + (ROWS-1-i)*HEIGHT/ROWS, 0); 
-    glVertex3i((j+1)*WIDTH/COLUMNS,(wall_size) +(ROWS-1-i)*HEIGHT/ROWS, 0); 
-
-    glEnd();
-
-/*
-    glColor3f(0.0,0.0,1.0);
-    glBegin(GL_QUADS);
-    glVertex3i(((j+1)*WIDTH/COLUMNS),((ROWS-i)*HEIGHT/ROWS), -1 * wall_size);
-    glVertex3i((wall_size)+(j*WIDTH/COLUMNS), ((ROWS-i)*HEIGHT/ROWS),  wall_size);
-    glVertex3i((wall_size)+(j*WIDTH/COLUMNS), ((ROWS-1-i)*HEIGHT/ROWS), wall_size);
-    glVertex3i(((j+1)*WIDTH/COLUMNS),((ROWS-1-i)*HEIGHT/ROWS), -1 * wall_size);
-    glEnd();
-
-
-/*
-    glColor3f(0.0,0.0,1.0);
-    glBegin(GL_QUADS);
-    glVertex3i(((j+1)*WIDTH/COLUMNS),((ROWS-i)*HEIGHT/ROWS), 0);
-    glVertex3i(((j*WIDTH/COLUMNS)), ((ROWS-i)*HEIGHT/ROWS),  0);
-    glVertex3i((j*WIDTH/COLUMNS), ((ROWS-1-i)*HEIGHT/ROWS),  -1 * wall_size); 
-    glVertex3i(((j+1)*WIDTH/COLUMNS),((ROWS-1-i)*HEIGHT/ROWS), -1 * wall_size); 
-    glEnd();
-/*
-    glColor3f(0.0,0.0,1.0);
-    glBegin(GL_QUADS);
-    glVertex3i(((j+1)*WIDTH/COLUMNS),((ROWS-i)*HEIGHT/ROWS), wall_size);  
-    glVertex3i(((j*WIDTH/COLUMNS)), ((ROWS-i)*HEIGHT/ROWS),   wall_size);
-    glVertex3i((j*WIDTH/COLUMNS), ((ROWS-1-i)*HEIGHT/ROWS),  -1 * wall_size);
-    glVertex3i(((j+1)*WIDTH/COLUMNS),((ROWS-1-i)*HEIGHT/ROWS), -1 * wall_size);
+    glVertex3i((j*WIDTH/COLUMNS), (ROWS-1-i)*HEIGHT/ROWS, wall_size);
      
-     
-      
-    glEnd();
-
-    glColor3f(0.0,0.0,1.0);
-    glBegin(GL_QUADS);
-    glVertex3i(((j+1)*WIDTH/COLUMNS),((ROWS-i)*HEIGHT/ROWS), -1 * wall_size);
-    glVertex3i(((j*WIDTH/COLUMNS)), ((ROWS-i)*HEIGHT/ROWS),  -1 *  wall_size);
-    glVertex3i((j*WIDTH/COLUMNS), ((ROWS-1-i)*HEIGHT/ROWS),  wall_size); 
-    glVertex3i(((j+1)*WIDTH/COLUMNS),((ROWS-1-i)*HEIGHT/ROWS), wall_size); 
     
+    
+    
+
     glEnd();
 
-*/
 
 }
 
