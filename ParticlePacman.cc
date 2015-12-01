@@ -50,14 +50,24 @@ void ParticlePacman::integrate(long t)
 
 void ParticlePacman::draw()
 {
-
+/*
     glColor3f(0.0,1.0,1.0);
 
     int middleX = (((y+1)*WIDTH/COLUMNS)+(y*WIDTH/COLUMNS))/2; 
     int middleY = (((ROWS-x)*HEIGHT/ROWS) + ((ROWS-1-x)*HEIGHT/ROWS))/2;
 
     drawFilledCircle(middleX,middleY,7.0);
+*/
 
+    int middleX = (((y+1)*WIDTH/COLUMNS)+(y*WIDTH/COLUMNS))/2; 
+    int middleY = (((ROWS-x)*HEIGHT/ROWS) + ((ROWS-1-x)*HEIGHT/ROWS))/2;
+
+    glColor3d(0.0,1.0,1.0); 
+ 
+    glPushMatrix();
+        glTranslated(middleX,middleY,-6);
+        glutSolidSphere(10,50,50);
+    glPopMatrix(); 
 
 
 /*

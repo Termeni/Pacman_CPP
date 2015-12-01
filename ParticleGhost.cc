@@ -12,13 +12,14 @@ ParticleGhost::ParticleGhost()
 
 void ParticleGhost::set_position(int x,int y)
 {
+  srand(time(NULL));
   this->x = x;
   this->y = y;
   move();
 }
 
 void ParticleGhost::move(){
-  srand(time(NULL));
+  
   int r = rand() % 4;
 
   direction = r+1;
@@ -79,7 +80,10 @@ void ParticleGhost::draw()
     int middleX = (((y+1)*WIDTH/COLUMNS)+(y*WIDTH/COLUMNS))/2; 
     int middleY = (((ROWS-x)*HEIGHT/ROWS) + ((ROWS-1-x)*HEIGHT/ROWS))/2;
 
-    drawFilledCircle(middleX,middleY,7.0);
+    glPushMatrix();
+        glTranslated(middleX,middleY,-6);
+        glutSolidSphere(10,50,50);
+    glPopMatrix();
 
 
 

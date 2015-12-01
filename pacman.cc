@@ -100,7 +100,7 @@ void display()
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 
-  PositionObserver(anglealpha,anglebeta,500);
+  PositionObserver(anglealpha,anglebeta,5000);
   cout << "alpha" << anglealpha << endl ;
   cout << "beta" << anglebeta << endl;
   cout << endl;
@@ -108,7 +108,7 @@ void display()
 
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  glOrtho(-WIDTH*0.5,WIDTH*1.0,-HEIGHT*0.5,HEIGHT*1.0,10,10000);
+  glOrtho(-WIDTH*0.1,WIDTH*1.0,-HEIGHT*0.1,HEIGHT*1.0,10,10000);
 
   glMatrixMode(GL_MODELVIEW);
 
@@ -155,7 +155,7 @@ void drawGround(int i, int j){
 
     int wall_size = -20;
 
-    glColor3f(1.0,1.0,1.0);
+    glColor3f(0.5,0.2,0.2);
     //below
     glBegin(GL_QUADS);
 
@@ -253,6 +253,8 @@ void drawWall(int i, int j){
 
 void drawPacman(int i, int j){
 
+
+
     glColor3f(0.0,1.0,1.0);
 
     int middleX = (((j+1)*WIDTH/COLUMNS)+(j*WIDTH/COLUMNS))/2; 
@@ -296,7 +298,10 @@ void drawBlueGhost(int i, int j){
     int middleX = (((j+1)*WIDTH/COLUMNS)+(j*WIDTH/COLUMNS))/2; 
     int middleY = (((ROWS-i)*HEIGHT/ROWS) + ((ROWS-1-i)*HEIGHT/ROWS))/2;
 
-    drawFilledCircle(middleX,middleY,7.0);
+    glPushMatrix();
+        glTranslated(middleX,middleY,-6);
+        glutSolidSphere(10,50,50);
+    glPopMatrix(); 
 
 }
 
@@ -308,7 +313,10 @@ void drawFood(int i, int j){
     int middleX = (((j+1)*WIDTH/COLUMNS)+(j*WIDTH/COLUMNS))/2; 
     int middleY = (((ROWS-i)*HEIGHT/ROWS) + ((ROWS-1-i)*HEIGHT/ROWS))/2;
 
-    drawFilledCircle(middleX,middleY,5.0);
+    glPushMatrix();
+        glTranslated(middleX,middleY,-6);
+        glutSolidSphere(5,50,50);
+    glPopMatrix(); 
 
 }
 
