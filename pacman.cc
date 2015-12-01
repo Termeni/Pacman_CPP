@@ -30,6 +30,7 @@ void drawRedGhost(int i, int j);
 void drawYellowGhost(int i, int j);
 void drawFood(int i, int j);
 void drawWall(int i, int j);
+void drawGround(int i, int j);
 void movePacman(int key);
 bool moveGhost(int key);
 
@@ -117,8 +118,9 @@ void display()
             drawWall(i,j);
       }else if (map->hasFood(i,j)){
             drawFood(i,j);
-      }else if (map->isPacman(i,j)){
-            //drawPacman(i,j);
+            drawGround(i,j);
+      }else{
+        drawGround(i,j);
       }
       /*if (map->isBlueGhost(i,j)){
             drawBlueGhost(i,j);
@@ -148,6 +150,24 @@ void display()
 
 }
 
+
+void drawGround(int i, int j){
+
+    int wall_size = -20;
+
+    glColor3f(1.0,1.0,1.0);
+    //below
+    glBegin(GL_QUADS);
+
+    glVertex3i((j+1)*WIDTH/COLUMNS,(ROWS-i)*HEIGHT/ROWS, wall_size);
+    glVertex3i((j*WIDTH/COLUMNS), ((ROWS-i)*HEIGHT/ROWS), wall_size);
+    glVertex3i((j*WIDTH/COLUMNS), (ROWS-1-i)*HEIGHT/ROWS, wall_size); 
+    glVertex3i((j+1)*WIDTH/COLUMNS,(ROWS-1-i)*HEIGHT/ROWS, wall_size); 
+
+    glEnd();
+
+}
+
 void drawWall(int i, int j){
 
     int wall_size = -20;
@@ -168,16 +188,7 @@ void drawWall(int i, int j){
 
     glEnd();
 
-    glColor3f(1.0,1.0,1.0);
-    //below
-    glBegin(GL_QUADS);
 
-    glVertex3i((j+1)*WIDTH/COLUMNS,(ROWS-i)*HEIGHT/ROWS, wall_size);
-    glVertex3i((j*WIDTH/COLUMNS), ((ROWS-i)*HEIGHT/ROWS), wall_size);
-    glVertex3i((j*WIDTH/COLUMNS), (ROWS-1-i)*HEIGHT/ROWS, wall_size); 
-    glVertex3i((j+1)*WIDTH/COLUMNS,(ROWS-1-i)*HEIGHT/ROWS, wall_size); 
-
-    glEnd();
 
     //front
     glColor3f(0.0,0.0,1.0);
