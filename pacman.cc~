@@ -205,7 +205,7 @@ void drawWall(int i, int j){
 
     glEnable(GL_TEXTURE_2D);
     
-    glBindTexture(GL_TEXTURE_2D,rogueSquadronTexture);
+    glBindTexture(GL_TEXTURE_2D,wallTexture);
 
     //glColor3f(1.0,0.0,0.0);
             //glColor3f(0.0,0.0,0.0);
@@ -223,7 +223,7 @@ void drawWall(int i, int j){
 
 
     //front
-    glBindTexture(GL_TEXTURE_2D,wallTexture);
+    glBindTexture(GL_TEXTURE_2D,rogueSquadronTexture);
     glBegin(GL_QUADS);
 
     glTexCoord2f(0.0,0.0); glVertex3i((j+1)*WIDTH/COLUMNS,(ROWS-1-i)*HEIGHT/ROWS, 0);

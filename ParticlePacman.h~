@@ -1,4 +1,5 @@
-#include <GL/glut.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
 #include <math.h>  
 
 #define COLUMNS 35
@@ -10,24 +11,22 @@
 #define MOVE 1
 #define QUIET 2
 
-class ParticleGhost {
+class ParticlePacman {
     public:
   float x,y;   //-- Current position
   float vx,vy; //-- Velocity vector
   int state;
-  int direction;
+  
 
   long time_remaining;
 
 
 
-  ParticleGhost();
+  ParticlePacman();
   void set_position(int x,int y);
   void init_movement(int destination_x,int destination_y,int duration);
   void integrate(long t);
   void draw();
-
-  void move();
 
   void drawFilledCircle(GLfloat x, GLfloat y, GLfloat radius);
 

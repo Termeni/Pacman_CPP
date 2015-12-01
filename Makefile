@@ -1,14 +1,3 @@
-CC=g++
-CFLAGS=-c -Wall -framework OpenGL -framework GLUT
-LDFLAGS=-framework OpenGL -framework GLUT
-SOURCES=pacman.cc Cell.cc Map.cc Graph.cc ParticlePacman.cc ParticleGhost.cc
-OBJECTS=$(SOURCES:.cc=.o)
-EXECUTABLE=pacman.exe
+all:
+	g++ -o pacman.exe pacman.cc Cell.cc Map.cc ParticlePacman.cc ParticleGhost.cc Graph.cc -lglut -lGLU -lGL -lm /usr/local/lib/libjpeg.a
 
-all: $(SOURCES) $(EXECUTABLE)
-    
-$(EXECUTABLE): $(OBJECTS) 
-	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
-
-.cc.o:
-	$(CC) $(CFLAGS) $< -o $@
