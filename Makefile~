@@ -1,3 +1,0 @@
-all:
-	g++ /usr/local/lib/libjpeg.a -o pacman.exe pacman.cc Cell.cc Map.cc ParticlePacman.cc ParticleGhost.cc Graph.cc -lglut -lGLU -lGL -lm 
-
