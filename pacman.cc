@@ -28,7 +28,6 @@ GLuint LoadTexture(char *filename,int dim);
 void display();
 void keyboard(unsigned char key, int x, int y);
 
-void drawPacman(int i, int j);
 void drawBlueGhost(int i, int j);
 void drawGreenGhost(int i, int j);
 void drawRedGhost(int i, int j);
@@ -85,7 +84,7 @@ int main(int argc,char *argv[]) {
     glutInitWindowSize(WIDTH, HEIGHT);
     glutCreateWindow("Pacman");
     glEnable(GL_DEPTH_TEST);
-
+    glEnable(GL_LIGHTING);
     
     //LoadTexture("grass.jpg",64);
     //LoadTexture("grass.jpg",64);
@@ -106,6 +105,11 @@ int main(int argc,char *argv[]) {
 
 void display()
 {
+
+  GLint position[4];
+  GLfloat color[4];
+  GLfloat material[4];
+
   int i,j;
   glClearColor(0.0,0.0,0.0,0.0);
   glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
@@ -119,6 +123,8 @@ void display()
   cout << endl;
 
 
+  
+
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   glOrtho(-WIDTH*0.1,WIDTH*1.0,-HEIGHT*0.1,HEIGHT*1.0,10,10000);
@@ -127,6 +133,18 @@ void display()
 
   glPolygonMode(GL_FRONT,GL_FILL);
   glPolygonMode(GL_BACK,GL_LINE);
+
+  //lights
+
+  //-- Ambient light
+  
+  position[0]=0; position[1]=0; position[2]=-30; position[3]=1; 
+  glLightiv(GL_LIGHT0,GL_POSITION,position);
+  
+  color[0]=0.1; color[1]=0.1; color[2]=0.1; color[3]=1;
+  glLightfv(GL_LIGHT0,GL_AMBIENT,color);
+  glEnable(GL_LIGHT0);
+
 
   for(i=0;i<ROWS;i++){
     for(j=0;j<COLUMNS;j++){
@@ -176,11 +194,18 @@ void drawGround(int i, int j){
 
     //below
 
+    GLfloat material[4];
+    material[0]=1.0;
+    material[1]=1.0;
+    material[2]=1.0;
+    material[3]=1.0;
+    glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,material);
+
     glEnable(GL_TEXTURE_2D);
     
     glBindTexture(GL_TEXTURE_2D,groundTexture);
 	
-
+    glShadeModel(GL_SMOOTH);
     glBegin(GL_QUADS);
     glTexCoord2f(0.0,0.0); glVertex3i((j+1)*WIDTH/COLUMNS,(ROWS-i)*HEIGHT/ROWS, wall_size);
     glTexCoord2f(1.0,0.0); glVertex3i((j*WIDTH/COLUMNS), ((ROWS-i)*HEIGHT/ROWS), wall_size);
@@ -200,17 +225,24 @@ void drawWall(int i, int j){
 
     int wall_size = -20;
 
+
+
     glPolygonMode(GL_FRONT,GL_FILL);
     glPolygonMode(GL_BACK,GL_LINE);
 
     glEnable(GL_TEXTURE_2D);
     
     glBindTexture(GL_TEXTURE_2D,rogueSquadronTexture);
-
-    //glColor3f(1.0,0.0,0.0);
             //glColor3f(0.0,0.0,0.0);
 
     //top
+
+    GLfloat material[4];
+    material[0]=1.0;
+    material[1]=1.0;
+    material[2]=1.0;
+    material[3]=1.0;
+    glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,material);
     glBegin(GL_QUADS);
 
     glTexCoord2f(0.0,0.0); glVertex3i((j+1)*WIDTH/COLUMNS,(ROWS-i)*HEIGHT/ROWS, 0);
@@ -283,18 +315,6 @@ void drawWall(int i, int j){
 
 }
 
-void drawPacman(int i, int j){
-
-
-
-    glColor3f(0.0,1.0,1.0);
-
-    int middleX = (((j+1)*WIDTH/COLUMNS)+(j*WIDTH/COLUMNS))/2; 
-    int middleY = (((ROWS-i)*HEIGHT/ROWS) + ((ROWS-1-i)*HEIGHT/ROWS))/2;
-
-    drawFilledCircle(middleX,middleY,7.0);
-    
-}
 
 void drawGreenGhost(int i, int j){
     glColor3f(0.0,0.75,1.0);
@@ -340,8 +360,9 @@ void drawBlueGhost(int i, int j){
 
 void drawFood(int i, int j){
 
-    glColor3f(1.0,1.0,0.0);
-
+    GLfloat material[4];
+    material[0]=1; material[1]=1; material[2]=0; material[3]=1.0; 
+    glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,material);
     int middleX = (((j+1)*WIDTH/COLUMNS)+(j*WIDTH/COLUMNS))/2; 
     int middleY = (((ROWS-i)*HEIGHT/ROWS) + ((ROWS-1-i)*HEIGHT/ROWS))/2;
 
@@ -400,10 +421,11 @@ void movePacman(int key){
         case LEFT: 
             if (!map->isWall(map->pacmanX,map->pacmanY-1) && pacman.state == QUIET)
             {
-
+                
                 if(map->isGhost(map->pacmanX,map->pacmanY-1)){
                     exit(0);
                 }
+                pacman.set_direction(LEFT);
                 //cout << "Pacman y" << map->pacmanY << endl;
                 pacman.init_movement(map->pacmanX,map->pacmanY-1,100);
                 map->setCorridor(map->pacmanX,map->pacmanY);
@@ -418,7 +440,7 @@ void movePacman(int key){
                 if(map->isGhost(map->pacmanX-1,map->pacmanY)){
                     exit(0);
                 }
-
+                pacman.set_direction(UP);
                 pacman.init_movement(map->pacmanX-1,map->pacmanY,100);
                 map->setCorridor(map->pacmanX,map->pacmanY);
                 map->setPacman(map->pacmanX-1,(map->pacmanY));
@@ -431,7 +453,7 @@ void movePacman(int key){
                 if(map->isGhost(map->pacmanX,map->pacmanY+1)){
                     exit(0);
                 }
-
+                pacman.set_direction(RIGHT);
                 pacman.init_movement(map->pacmanX,map->pacmanY+1,100);
                 map->setCorridor(map->pacmanX,map->pacmanY);
                 map->setPacman(map->pacmanX,(map->pacmanY)+1);
@@ -444,7 +466,7 @@ void movePacman(int key){
                 if(map->isGhost(map->pacmanX+1,map->pacmanY)){
                     exit(0);
                 }
-
+                pacman.set_direction(DOWN);
                 pacman.init_movement(map->pacmanX+1,map->pacmanY,100);
                 map->setCorridor(map->pacmanX,map->pacmanY);
                 map->setPacman(map->pacmanX+1,(map->pacmanY));
@@ -674,7 +696,7 @@ GLuint LoadTexture(char *filename,int dim)
 
   glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
   glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-  glTexEnvi(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_REPLACE);
+  glTexEnvi(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_MODULATE);
   glTexImage2D(GL_TEXTURE_2D,0,GL_RGB,dim,dim,0,GL_RGB,GL_UNSIGNED_BYTE,buffer2);
 
   free(buffer);

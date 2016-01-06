@@ -133,12 +133,12 @@ void ParticlePacman::draw()
     material[3]=1.0;
     glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,material);
     glPushMatrix();
-        glTranslated(faro1x,faro1y,-6);
+        glTranslated(faro1x,faro1y,-3);
         glutSolidSphere(3,50,50);
     glPopMatrix();
     glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,material);
     glPushMatrix();
-        glTranslated(faro2x,faro2y,-6);
+        glTranslated(faro2x,faro2y,-3);
         glutSolidSphere(3,50,50);
     glPopMatrix();
 

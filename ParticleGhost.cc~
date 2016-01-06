@@ -95,7 +95,7 @@ void ParticleGhost::draw()
     glLightfv(GL_LIGHT2,GL_AMBIENT,color);
     glLightf(GL_LIGHT2,GL_CONSTANT_ATTENUATION,0.0);
 
-    glLightf(GL_LIGHT2,GL_LINEAR_ATTENUATION,0.025);
+    glLightf(GL_LIGHT2,GL_LINEAR_ATTENUATION,0.05);
     glLightf(GL_LIGHT2, GL_SPOT_EXPONENT, 90.0);
     glEnable(GL_LIGHT2);
 
