@@ -1,5 +1,11 @@
 #include <GL/glut.h>
 #include <math.h>  
+#include <string.h>
+#include <stdlib.h>
+#include <iostream>
+#include <time.h>
+#include <unistd.h>
+#include <Python.h>
 
 #define COLUMNS 35
 #define ROWS 35
@@ -9,6 +15,8 @@
 
 #define MOVE 1
 #define QUIET 2
+
+using namespace std;
 
 class ParticleGhost {
     public:
@@ -27,7 +35,7 @@ class ParticleGhost {
   void integrate(long t);
   void draw();
 
-  void move();
+  void move(int DIFFICULTY, int ghostIndex, string map_string);
 
   void drawFilledCircle(GLfloat x, GLfloat y, GLfloat radius);
 

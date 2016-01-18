@@ -65,8 +65,8 @@ class Map{
         bool isRedGhost(int i,int j);
         bool isYellowGhost(int i,int j);
         void setCorridor(int x,int y);
-        void setPacman(int x, int y);
+        void setPacman(int x, int y, bool hungry);
         void setBlueGhost(int x, int y);
         bool isGhost(int x, int y);
-
+        string get_map_string();
 };

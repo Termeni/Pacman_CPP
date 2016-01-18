@@ -350,22 +350,26 @@ bool Map::hasFood(int x, int y){
 void Map::setCorridor(int x,int y){
     map[x][y].setCorridor();
 }
-void Map::setPacman(int x, int y){
+void Map::setPacman(int x, int y, bool hungry){
     this->pacmanX=x;
     this->pacmanY=y;
     map[pacmanX][pacmanY].setPacman();
 
     if (map[pacmanX][pacmanY].hasFood())
     {
-        map[pacmanX][pacmanY].eatFood();
 
-        if (food>1)
-        {
-            cout<<food<<endl;
-            food= food - 1;
-        }else{
-            exit(0);
-        }
+	if(!hungry){
+
+        	map[pacmanX][pacmanY].eatFood();
+
+        	if (food>1)
+        	{
+	    		cout<<food<<endl;
+           		food= food - 1;
+        	}else{
+	        	exit(0);
+        	}
+	}
     }
   
 }
@@ -407,4 +411,31 @@ void Map::print(){
 
 bool Map::isGhost(int x, int y){
     return map[x][y].isGhost();
+}
+
+string Map::get_map_string()
+{
+    string map_string = "";
+    
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < columns; j++) {
+            switch (map[i][j].getValue())
+            {
+                case '0':
+                    map_string.push_back('%');
+                    break;
+                case ' ':
+                    map_string.push_back(' ');
+                    break;
+                case '2':
+                    map_string.push_back('P');
+                    break;
+                case '3':
+                    map_string.push_back('G');
+                    break;
+            }
+        }
+        map_string.push_back('\n');
+    }
+    return map_string;
 }

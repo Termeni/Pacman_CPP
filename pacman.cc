@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <jpeglib.h>
+#include "Arduino.h"
 
 using namespace std;
 
@@ -41,6 +42,9 @@ bool moveGhost(int key);
 void PositionObserver(float alpha,float beta,int radi);
 
 void idle();
+
+void readData();
+
 Map *map;
 
 long last_t=0;
@@ -51,17 +55,33 @@ ParticleGhost ghost;
 int anglealpha = 90;
 int anglebeta = 26;
 
+Arduino arduino;
+ArduinoData ardData;
+
+void readData(){
+  
+  arduino.getData();
+}
+
 GLuint groundTexture, wallTexture, rogueSquadronTexture;
 
+bool hungry = true;
+
+int DIFFICULTY = 2;
+
 int main(int argc,char *argv[]) {
+
+    thread th1 (readData);
     
+    cout << "Configuring controller..." << endl;
+
     cout << "Pacman" << endl;
     
     cout << "Generating map..." << endl;
     
     map = new Map(ROWS, COLUMNS);
-    map->print();
-    
+    cout << map->get_map_string() << endl;
+
     cout << "Map generated." << endl;
 
     int i,j;
@@ -105,6 +125,30 @@ int main(int argc,char *argv[]) {
 
 void display()
 {
+
+  
+
+  ardData= arduino.getGameData();
+
+    printf("-----------------------------------------------\n");
+    printf("Direction: %s\n", ardData.direction.c_str());
+    printf("Pulse Sensor Stable Value: %i\n",ardData.pulseSensorStableValue);
+    printf("Pulse Sensor Real Value: %i\n",ardData.pulseSensorRealValue);
+    printf("Skin Resistence Stable Value: %i\n",ardData.skinResistenceStableValue);
+    printf("Skin Resistence Real Value: %i\n",ardData.skinResistenceRealValue);
+    printf("Hungry: %i\n",ardData.hungry);
+    printf("-----------------------------------------------\n");
+
+  if(ardData.direction.compare("left")==0){
+	movePacman(LEFT);
+  }else if(ardData.direction.compare("right")==0){
+	movePacman(RIGHT);
+  }else if(ardData.direction.compare("up")==0){
+	movePacman(UP);
+  }else if(ardData.direction.compare("down")==0){
+	movePacman(DOWN);
+  }
+ hungry = ardData.hungry;
 
   GLint position[4];
   GLfloat color[4];
@@ -173,8 +217,8 @@ void display()
   if(ghost.state == QUIET){
     bool flag = false;
     //cout << "Fora" << endl;
-    
-        ghost.move();
+        string mapString = map->get_map_string();
+        ghost.move(DIFFICULTY, 1, mapString);
         flag = moveGhost(ghost.direction);
     
     //cout << "Fora" << endl;
@@ -429,7 +473,7 @@ void movePacman(int key){
                 //cout << "Pacman y" << map->pacmanY << endl;
                 pacman.init_movement(map->pacmanX,map->pacmanY-1,100);
                 map->setCorridor(map->pacmanX,map->pacmanY);
-                map->setPacman(map->pacmanX,(map->pacmanY)-1);
+                map->setPacman(map->pacmanX,(map->pacmanY)-1, hungry);
                 //map->pacmanY=map->pacmanY-1;
             }
         break;
@@ -443,7 +487,7 @@ void movePacman(int key){
                 pacman.set_direction(UP);
                 pacman.init_movement(map->pacmanX-1,map->pacmanY,100);
                 map->setCorridor(map->pacmanX,map->pacmanY);
-                map->setPacman(map->pacmanX-1,(map->pacmanY));
+                map->setPacman(map->pacmanX-1,(map->pacmanY), hungry);
             }
         break;
 
@@ -456,7 +500,7 @@ void movePacman(int key){
                 pacman.set_direction(RIGHT);
                 pacman.init_movement(map->pacmanX,map->pacmanY+1,100);
                 map->setCorridor(map->pacmanX,map->pacmanY);
-                map->setPacman(map->pacmanX,(map->pacmanY)+1);
+                map->setPacman(map->pacmanX,(map->pacmanY)+1, hungry);
             }
         break;
 
@@ -469,7 +513,7 @@ void movePacman(int key){
                 pacman.set_direction(DOWN);
                 pacman.init_movement(map->pacmanX+1,map->pacmanY,100);
                 map->setCorridor(map->pacmanX,map->pacmanY);
-                map->setPacman(map->pacmanX+1,(map->pacmanY));
+                map->setPacman(map->pacmanX+1,(map->pacmanY), hungry);
             }
             break;
             
